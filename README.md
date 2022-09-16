@@ -60,6 +60,18 @@ Note: Redux DevTools extension to check state in time
 
 - Each reducer handles a 'slice of state' (a portion of the entire Redux store)
 
+Mock API
+
+- start development immediately, even before API exists
+- agree with the dev team about the shape of data the real api will return and create the mock api the same
+- fast, the data response comes quickly, helps at testing
+- test the real API before deployment, point to the real api later
+- add in webpack.config.dev.js: (webpack will replace in the app process.env.API_URL with url specified)
+  plugins: [
+  new webpack.DefinePlugin({
+  "process.env.API_URL": JSON.stringify("http://localhost:3001"),
+  }),
+
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
 ## Get Started
