@@ -16,7 +16,7 @@ export function loadCourses() {
     return courseApi
       .getCourses()
       .then((courses) => {
-        dispatch(loadCoursesSuccess(courses));
+        dispatch(loadCoursesSuccess(courses)); //dispatch actions asynch
       })
       .catch((error) => {
         throw error;
