@@ -5,27 +5,32 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
-  state = {
-    course: {
-      title: "",
-    },
-  };
+  componentDidMount() {
+    this.props.actions
+      .loadCourses()
+      .catch((error) => alert("Error fetching courses" + error));
+  }
+  // state = {
+  //   course: {
+  //     title: "",
+  //   },
+  // };
 
-  // if you don't use arrow fn, need to bind 'this' to the class instance
-  handleChange = (event) => {
-    const course = { ...this.state.course, title: event.target.value };
-    this.setState({ course });
-  };
+  // // if you don't use arrow fn, need to bind 'this' to the class instance
+  // handleChange = (event) => {
+  //   const course = { ...this.state.course, title: event.target.value };
+  //   this.setState({ course });
+  // };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.props.actions.createCourse(this.state.course);
-  };
+  // handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   this.props.actions.createCourse(this.state.course);
+  // };
 
   render() {
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
+        {/* <form onSubmit={this.handleSubmit}>
           <h2>Courses</h2>
           <h3>Add Course</h3>
           <input
@@ -35,7 +40,8 @@ class CoursesPage extends React.Component {
           />
 
           <input type="submit" value="Save" />
-        </form>
+        </form> */}
+        <h2>Courses</h2>
         {this.props.courses.map((course) => (
           <div key={course.title}>{course.title}</div>
         ))}
