@@ -14,6 +14,23 @@ Steps:
 7. connect CoursesPage component to Redux store using 'connect' from 'react-redux'
    Connect can take 2 args: mapStateToProps & mapDipatchToProps (check below)
 8. create actions/actionTypes.js to have action types constants and avoid hard-coded typos
+9. configure redux-thunk to handle async calls
+
+- add 'thunk' into configureStore.js (received by applyMiddleware)
+- create the thunk function into actions files
+- thunk funct returns a function that receive 'dispatch' as argument and this will be used to displach an action (action creator fn) after it received the resp from ajax call
+  export function loadCourses() { // thunk fn
+  return function (dispatch) { //returns a fn
+  return courseApi
+  .getCourses() // api call
+  .then((courses) => {
+  dispatch(loadCoursesSuccess(courses)); //dispatch action creator async
+  })
+  })
+- define the action type into reducer which will return the new state
+
+10. use redux thunk fn to fetch data inside componentDidMount of CoursesPage (fn will be available as props from mapDispatchToProps)
+11. centralize initial redux state into reducers/initialState.js
 
 ---
 
