@@ -3,20 +3,15 @@ import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorsActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
-import { bindActionCreators } from "redux";
 
 class ManageCoursePage extends React.Component {
   componentDidMount() {
-    const { courses, authors, actions } = this.props;
+    const { courses, authors, loadCourses, loadAuthors } = this.props;
     if (courses.length === 0) {
-      actions
-        .loadCourses()
-        .catch((error) => alert("Error fetching courses" + error));
+      loadCourses().catch((error) => alert("Error fetching courses" + error));
     }
     if (authors.length === 0) {
-      actions
-        .loadAuthors()
-        .catch((error) => alert("Error fetching authors" + error));
+      loadAuthors().catch((error) => alert("Error fetching authors" + error));
     }
   }
 
@@ -32,7 +27,8 @@ class ManageCoursePage extends React.Component {
 ManageCoursePage.propTypes = {
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired,
+  loadCourses: PropTypes.function.isRequired,
+  loadAuthors: PropTypes.function.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -42,13 +38,9 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch), //redux thunk fn to fetch courses async
-      loadAuthors: bindActionCreators(authorsActions.loadAuthors, dispatch), //redux thunk fn to fetch authors async
-    },
-  };
-}
+const mapDispatchToProps = {
+  loadCourses: courseActions.loadCourses, //redux thunk fn to fetch courses async
+  loadAuthors: authorsActions.loadAuthors, //redux thunk fn to fetch authors async
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
