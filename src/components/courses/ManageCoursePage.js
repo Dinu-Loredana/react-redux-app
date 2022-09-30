@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import * as courseActions from "../../redux/actions/courseActions";
-import * as authorsActions from "../../redux/actions/authorActions";
+import { loadCourses, saveCourse } from "../../redux/actions/courseActions";
+import { loadAuthors } from "../../redux/actions/authorActions";
+// import * as courseActions from "../../redux/actions/courseActions";
+// import * as authorsActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
@@ -11,18 +13,13 @@ function ManageCoursePage({
   authors,
   loadCourses,
   loadAuthors,
+  saveCourse,
   ...props
 }) {
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setErrors] = useState({});
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setCourse((prevState) => ({
-      ...prevState,
-      [name]: name === "authorId" ? parseInt(value, 10) : value,
-    }));
-  }
+  // fetch courses and authors when comp is mounted
   useEffect(() => {
     if (courses.length === 0) {
       loadCourses().catch((error) => alert("Error fetching courses" + error));
@@ -32,12 +29,27 @@ function ManageCoursePage({
     }
   }, []);
 
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setCourse((prevState) => ({
+      ...prevState,
+      [name]: name === "authorId" ? parseInt(value, 10) : value,
+    }));
+  }
+
+  // dispatch create and update course when saving the form
+  function handleSave(event) {
+    event.preventDefault();
+    saveCourse(course);
+  }
+
   return (
     <CourseForm
       course={course}
       errors={errors}
       authors={authors}
       onChange={handleChange}
+      onSave={handleSave}
     />
   );
 }
@@ -48,6 +60,7 @@ ManageCoursePage.propTypes = {
   authors: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
+  saveCourse: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -59,8 +72,12 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  loadCourses: courseActions.loadCourses, //redux thunk fn to fetch courses async
-  loadAuthors: authorsActions.loadAuthors, //redux thunk fn to fetch authors async
+  loadCourses,
+  loadAuthors,
+  saveCourse,
+  //   loadCourses: courseActions.loadCourses, // redux thunk fn to fetch courses async
+  //   loadAuthors: authorsActions.loadAuthors, // redux thunk fn to fetch authors async
+  //   saveCourse: courseActions.saveCourse, // redux thunk fn to create/update course async
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
