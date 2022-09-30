@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { loadCourses, saveCourse } from "../../redux/actions/courseActions";
-import { loadAuthors } from "../../redux/actions/authorActions";
-// import * as courseActions from "../../redux/actions/courseActions";
-// import * as authorsActions from "../../redux/actions/authorActions";
+// import { loadCourses, saveCourse } from "../../redux/actions/courseActions";
+// import { loadAuthors } from "../../redux/actions/authorActions";
+import * as courseActions from "../../redux/actions/courseActions";
+import * as authorsActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
@@ -14,6 +14,7 @@ function ManageCoursePage({
   loadCourses,
   loadAuthors,
   saveCourse,
+  history, //destructure here cuz it's being passed in on props
   ...props
 }) {
   const [course, setCourse] = useState({ ...props.course });
@@ -40,7 +41,9 @@ function ManageCoursePage({
   // dispatch create and update course when saving the form
   function handleSave(event) {
     event.preventDefault();
-    saveCourse(course);
+    saveCourse(course).then(() => {
+      history.push("/courses"); //after saving the course, redirect to CoursesPage
+    });
   }
 
   return (
@@ -61,6 +64,7 @@ ManageCoursePage.propTypes = {
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
   saveCourse: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired, // any compon loaded via <Route> gets history passed in on props from React Router (destructure it)
 };
 
 function mapStateToProps(state) {
@@ -72,12 +76,12 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  loadCourses,
-  loadAuthors,
-  saveCourse,
-  //   loadCourses: courseActions.loadCourses, // redux thunk fn to fetch courses async
-  //   loadAuthors: authorsActions.loadAuthors, // redux thunk fn to fetch authors async
-  //   saveCourse: courseActions.saveCourse, // redux thunk fn to create/update course async
+  loadCourses: courseActions.loadCourses, // redux thunk fn to fetch courses async
+  loadAuthors: authorsActions.loadAuthors, // redux thunk fn to fetch authors async
+  saveCourse: courseActions.saveCourse, // redux thunk fn to create/update course async
+  //   loadCourses,
+  //   loadAuthors,
+  //   saveCourse,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
