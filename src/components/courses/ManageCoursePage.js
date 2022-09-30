@@ -19,16 +19,18 @@ function ManageCoursePage({
 }) {
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setErrors] = useState({});
-
+  console.log("props", props);
   // fetch courses and authors when comp is mounted
   useEffect(() => {
     if (courses.length === 0) {
       loadCourses().catch((error) => alert("Error fetching courses" + error));
+    } else {
+      setCourse({ ...props.course });
     }
     if (authors.length === 0) {
       loadAuthors().catch((error) => alert("Error fetching authors" + error));
     }
-  }, []);
+  }, [props.course]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -67,9 +69,19 @@ ManageCoursePage.propTypes = {
   history: PropTypes.object.isRequired, // any compon loaded via <Route> gets history passed in on props from React Router (destructure it)
 };
 
-function mapStateToProps(state) {
+function getCourseBySlug(courses, slug) {
+  return courses.find((course) => course.slug === slug) || null;
+}
+
+function mapStateToProps(state, ownProps) {
+  const slug = ownProps.match.params.slug; // read slug from url data beign passed by React Router
+  const course =
+    slug && state.courses.length > 0
+      ? getCourseBySlug(state.courses, slug)
+      : newCourse;
+  console.log(course);
   return {
-    course: newCourse,
+    course,
     courses: state.courses,
     authors: state.authors,
   };
