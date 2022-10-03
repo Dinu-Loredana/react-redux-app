@@ -11,9 +11,12 @@ export default function apiStatusReducer(
 ) {
   if (action.type == types.BEGIN_API_CALL) {
     return state + 1;
-  } else if (actionTypeEndsInSuccess(action.type)) {
-    //handling same action type in multiple reducers ( LOAD_COURSE_SUCCESS handles by this reducer and also courseReducer)
-    return state - 1;
+  } else if (
+    action.type === types.API_CALL_ERROR ||
+    actionTypeEndsInSuccess(action.type)
+  ) {
+    // handling same action type in multiple reducers ( LOAD_COURSE_SUCCESS handles by this reducer and also courseReducer)
+    return state - 1; // decrement apiCallsInProgress when api call fails (types.API_CALL_ERROR) or when it's succesfull (actionTypeEndsInSuccess(action.type))
   }
   return state;
 }

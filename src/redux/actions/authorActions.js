@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import * as authorApi from "../../api/authorApi";
-import { beginApiCall } from "../actions/apiStatusActions";
+import { beginApiCall, apiCallError } from "../actions/apiStatusActions";
 
 //action creator
 export function loadAuthorsSuccess(authors) {
@@ -18,6 +18,7 @@ export function loadAuthors() {
         dispatch(loadAuthorsSuccess(authors)); //dispatch action asynch
       })
       .catch((error) => {
+        dispatch(apiCallError(error)); //redux is notified that the api call is completed (even if it hs failed) by dispatch the action type specific for it
         throw error;
       });
   };

@@ -47,10 +47,15 @@ function ManageCoursePage({
   function handleSave(event) {
     event.preventDefault();
     setSaving(true);
-    saveCourse(course).then(() => {
-      toast.success("Course saved!");
-      history.push("/courses"); //after saving the course, redirect to CoursesPage
-    });
+    saveCourse(course)
+      .then(() => {
+        toast.success("Course saved!");
+        history.push("/courses"); //after saving the course, redirect to CoursesPage
+      })
+      .catch((error) => {
+        setSaving(false); // user can try resubmit the form after an err occurs
+        setErrors({ onSave: error.message });
+      });
   }
 
   return authors.length === 0 || courses.length === 0 ? (
