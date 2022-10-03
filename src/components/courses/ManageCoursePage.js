@@ -43,9 +43,20 @@ function ManageCoursePage({
     }));
   }
 
+  function formIsValid() {
+    const { title, authorId, category } = course;
+    const errors = {};
+    if (!title) errors.title = "Title required!";
+    if (!authorId) errors.author = "Author required!";
+    if (!category) errors.category = "Category required!";
+    setErrors(errors); // update errors state with form errors
+    // form is valid if the errors object has no property
+    return Object.keys(errors).length === 0;
+  }
   // dispatch create and update course when saving the form
   function handleSave(event) {
     event.preventDefault();
+    if (!formIsValid()) return;
     setSaving(true);
     saveCourse(course)
       .then(() => {
