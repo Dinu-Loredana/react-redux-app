@@ -1,5 +1,6 @@
 import * as types from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
+import { beginApiCall } from "../actions/apiStatusActions";
 
 // action creator (triggers the reducer)
 // export function createCourse(course) {
@@ -20,6 +21,7 @@ export function createCourseSuccess(course) {
 //thunk fn to fetch courses async (get request)
 export function loadCourses() {
   return function (dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .getCourses()
       .then((courses) => {
@@ -34,6 +36,7 @@ export function loadCourses() {
 // thunk fn to save course async (put/post request)
 export function saveCourse(course) {
   return function (dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .saveCourse(course)
       .then((savedCourse) => {
