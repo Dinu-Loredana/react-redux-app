@@ -17,7 +17,7 @@ function ManageCoursePage({
   history, //destructure here cuz it's being passed in on props
   ...props
 }) {
-  const [course, setCourse] = useState({ ...props.course });
+  const [course, setCourse] = useState({ ...props.course }); //copy the course passed in on props to state (empty course initially cuz courses aren't available- on load)
   const [errors, setErrors] = useState({});
   console.log("props", props);
   // fetch courses and authors when comp is mounted
@@ -25,7 +25,7 @@ function ManageCoursePage({
     if (courses.length === 0) {
       loadCourses().catch((error) => alert("Error fetching courses" + error));
     } else {
-      setCourse({ ...props.course });
+      setCourse({ ...props.course }); //when props change (props.course), update state (course) with new data; copy the course passed in on props to state any time a new course is passed in
     }
     if (authors.length === 0) {
       loadAuthors().catch((error) => alert("Error fetching authors" + error));
@@ -74,12 +74,13 @@ function getCourseBySlug(courses, slug) {
 }
 
 function mapStateToProps(state, ownProps) {
+  // console.log(ownProps)
   const slug = ownProps.match.params.slug; // read slug from url data beign passed by React Router
   const course =
-    slug && state.courses.length > 0
+    slug && state.courses.length > 0 // getCourseBySlug is called after courses are available, mapStateToProps is called every time redux store changes
       ? getCourseBySlug(state.courses, slug)
       : newCourse;
-  console.log(course);
+  //   console.log(course);
   return {
     course,
     courses: state.courses,

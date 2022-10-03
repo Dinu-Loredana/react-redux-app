@@ -51,7 +51,8 @@ Note: Redux DevTools extension to check state in time
 → ideal place to filter or transform the state to how you want to have it in the component.
 → pass as props only the parts of state/data (store) that the component needs (performance - component will re-render every time the props are changed, (this specific data)
 → every time the component re-renders, mapStateToProps is called (if you sort, filter or do something expensive as performance, use Reselect for memoization)
-→ receives 2 arguments: state and ownProps (state- store data, ownProps - let us access props that are being attached to this component)
+→ runs every time the redux store changes
+→ receives 2 arguments: state and ownProps (state- store data, ownProps - let us access props that are being attached to this component, can read URL data injected by React Router on props).
 
 # mapDispatchToProps
 
