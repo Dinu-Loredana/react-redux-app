@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
 import { Spinner } from "../common/Spinner";
+import { toast } from "react-toastify";
 
 function ManageCoursePage({
   courses,
@@ -20,6 +21,7 @@ function ManageCoursePage({
 }) {
   const [course, setCourse] = useState({ ...props.course }); //copy the course passed in on props to state (empty course initially cuz courses aren't available- on load)
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
   console.log("props", props);
   // fetch courses and authors when comp is mounted
   useEffect(() => {
@@ -35,8 +37,8 @@ function ManageCoursePage({
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setCourse((prevState) => ({
-      ...prevState,
+    setCourse((prevCourse) => ({
+      ...prevCourse,
       [name]: name === "authorId" ? parseInt(value, 10) : value,
     }));
   }
@@ -44,7 +46,9 @@ function ManageCoursePage({
   // dispatch create and update course when saving the form
   function handleSave(event) {
     event.preventDefault();
+    setSaving(true);
     saveCourse(course).then(() => {
+      toast.success("Course saved!");
       history.push("/courses"); //after saving the course, redirect to CoursesPage
     });
   }
@@ -58,6 +62,7 @@ function ManageCoursePage({
       authors={authors}
       onChange={handleChange}
       onSave={handleSave}
+      saving={saving}
     />
   );
 }

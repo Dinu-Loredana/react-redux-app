@@ -24,5 +24,6 @@ A given action may impact multiple reducers.
 A given reducer will typically work with multiple actions.
 Useful to keep reducers and action in separate folders (don't group them in feature folder as they may be used by other reducers/features).
 Actions and reducers shouldn't be tied to a single portion of app (feature). Doing so, a sign that that state shouldn't be put in Redux at all (use local state - useState).
+Use local state (useState) when only that comp and its children use it.
 Don't forget to add the reference of this reducer into rootReducer.
 */
