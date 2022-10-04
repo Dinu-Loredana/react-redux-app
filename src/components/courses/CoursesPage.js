@@ -27,15 +27,15 @@ class CoursesPage extends React.Component {
     }
   }
 
-  handleDeleteCourse = (course) => {
+  handleDeleteCourse = async (course) => {
     toast.success("Course deleted!"); // show message before api call finishes the deleting
-    this.props.actions
-      .deleteCourse(course) // behind the scenes, the req are still in progress
-      .catch((error) => {
-        toast.error("Delete failed" + error.message, { autoClose: false }); // handle fail in case or optimistic delete (show another message - error - that closes when user close it)
-      });
+    try {
+      await this.props.actions.deleteCourse(course); // behind the scenes, the req are still in progress
+    } catch (error) {
+      toast.error("Delete failed" + error.message, { autoClose: false }); // handle fail in case or optimistic delete (show another message - error - that closes when user close it)
+    }
   };
-
+  // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
   render() {
     return (
       <>
