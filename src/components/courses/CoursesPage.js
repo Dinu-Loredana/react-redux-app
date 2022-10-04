@@ -29,7 +29,11 @@ class CoursesPage extends React.Component {
 
   handleDeleteCourse = (course) => {
     toast.success("Course deleted!"); // show message before api call finishes the deleting
-    this.props.actions.deleteCourse(course); // behind the scenes, the req are still in progress
+    this.props.actions
+      .deleteCourse(course) // behind the scenes, the req are still in progress
+      .catch((error) => {
+        toast.error("Delete failed" + error.message, { autoClose: false }); // handle fail in case or optimistic delete (show another message - error - that closes when user close it)
+      });
   };
 
   render() {
