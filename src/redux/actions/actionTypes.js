@@ -5,3 +5,10 @@ export const UPDATE_COURSE_SUCCESS = "UPDATE_COURSE_SUCCESS";
 export const CREATE_COURSE_SUCCESS = "CREATE_COURSE_SUCCESS";
 export const BEGIN_API_CALL = "BEGIN_API_CALL";
 export const API_CALL_ERROR = "API_CALL_ERROR";
+export const DELETE_COURSE_OPTIMISTIC = "DELETE_COURSE_OPTIMISTIC";
+/*
+By convesion, action types ended in "_SUCCESS" are the result of api call succesfully.
+Since it's an optimistic delete (positive case), we are omiting the loading state.
+So this action name omits suffix _SUCCESS. If it'd had one, counter would be decremented below zero
+because it doesnn't increment no of apiCallsInProgress when delete request begins.
+*/

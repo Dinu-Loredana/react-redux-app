@@ -42,7 +42,7 @@ function ManageCoursePage({
       [name]: name === "authorId" ? parseInt(value, 10) : value,
     }));
   }
-
+  // Implement client-side form validation for instant feedback, not to wait for server validation, good UX
   function formIsValid() {
     const { title, authorId, category } = course;
     const errors = {};
