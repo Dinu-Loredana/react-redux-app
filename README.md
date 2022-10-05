@@ -1,4 +1,4 @@
-Steps:
+Steps to configure Redux and Redux Thunk
 
 1. create CoursesPage (form with handleChange, handleSubmit)
 2. create CreateCourse action type into actions/actionTypes.js
@@ -18,7 +18,7 @@ Steps:
 
 - add 'thunk' into configureStore.js (received by applyMiddleware)
 - create the thunk function into actions files
-- thunk funct returns a function that receive 'dispatch' as argument and this will be used to displach an action (action creator fn) after it received the resp from ajax call
+- thunk funct returns a function that receive 'dispatch' as argument and this will be used to dispatch an action (action creator fn) after it received the resp from ajax call
   export function loadCourses() { // thunk fn
   return function (dispatch) { //returns a fn
   return courseApi
@@ -89,6 +89,40 @@ Mock API
   new webpack.DefinePlugin({
   "process.env.API_URL": JSON.stringify("http://localhost:3001"),
   }),
+
+  Testing:
+
+- testing framework: Jest
+- testing (helper) libraries: Enzyme, React Testing Library, React Test Utils
+- Enzyme uses React Test Utils utils behind the scenes (but it's more friendly) and JSDOM to create an in-memory DOM to simulate the browser.
+- JSDOM offers a simulated DOM that runs in node, can interact with DOM as you're in a real browser
+- React Testing Library - alternative to Enzyme (both can simulate interactions with React compon withouth opening a browser, both are used to test components, choose one.)
+- Jest (framework, test runner) + Enzyme / React Testing Library (helper)
+- ----- Configure Jest in package.json --------
+- add a new script that will run tests via Jest. Use --watch (works only on Git repos) or --watchAll to watch the files and run the tests every time we save it.
+  "test": "jest --watch"
+- run tests with npm t / npm test / npm run test (run all files that end eith test.js or spec.js)
+- add in package.json a new section for jest
+  "jest": {
+  "setupFiles": [
+  "./tools/testSetup.js"
+  ],
+  "testEnvironment": "jsdom", // tell jest to use jsdom test env (creates a DOM-like env)
+  "moduleNameMapper": {
+  "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tools/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/tools/styleMock.js"
+  // tells jest how to handle dif files, to ignore these imports
+  }
+  },
+  Snapshot testing
+- useful when you don't want your app UI to change unexpectedly, document expecting output and regression testing production.
+- store a record of a component's output.
+- value of snapshot test is pointing out any time the react compon changes it's view (test will fail if the comp view doesn't match with the snapshot saved)
+- protect from making accidental changes to compon output.
+- renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.
+- the first time the snapshot test runs, it creates a _snapshot_ folder where is the output saved.
+- on the next test runned, Jest will compare the rendered output with the saved snapshot. If they match, the test will pass. If they don't match, either the test runner found a bug in your code that should be fixed, or the implementation has changed and the snapshot needs to be updated (-u option).
+- the snapshot should be committed alongside code changes, and reviewed as part of your code review process
 
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
