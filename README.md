@@ -113,8 +113,7 @@ Mock API
       "\\.(css|less)$": "<rootDir>/tools/styleMock.js"
   // tells jest how to handle dif files, to ignore these imports
   }
-  },
-  Snapshot testing
+  }, \***\*\*\*\*\*\*\***Snapshot testing
 - useful when you don't want your app UI to change unexpectedly, document expecting output and regression testing production.
 - store a record of a component's output.
 - value of snapshot test is pointing out any time the react compon changes it's view (test will fail if the comp view doesn't match with the snapshot saved)
@@ -123,6 +122,18 @@ Mock API
 - the first time the snapshot test runs, it creates a _snapshot_ folder where is the output saved.
 - on the next test runned, Jest will compare the rendered output with the saved snapshot. If they match, the test will pass. If they don't match, either the test runner found a bug in your code that should be fixed, or the implementation has changed and the snapshot needs to be updated (-u option).
 - the snapshot should be committed alongside code changes, and reviewed as part of your code review process
+
+\***\*\*\*\*\*\*** Testing Redux
+Testing React Components
+
+- Presentational compon: test markup (given some props, expect the output)
+- Connected (container) compon:
+
+* test behaviour (what happens when click a btn, eg); should have very little markup
+* wrapped in a connect method - connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
+  2 options:
+  - wrap the comp into <Provider> and pass the store
+  - add named export to the unconnected component and import it the test file (not the connected comp)
 
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
