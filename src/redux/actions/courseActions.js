@@ -1,7 +1,6 @@
 import * as types from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
 import { beginApiCall, apiCallError } from "../actions/apiStatusActions";
-import { func } from "prop-types";
 
 // action creators (triggers the reducer by dispatching an action type)
 export function loadCoursesSuccess(courses) {

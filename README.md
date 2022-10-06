@@ -123,8 +123,9 @@ Mock API
 - on the next test runned, Jest will compare the rendered output with the saved snapshot. If they match, the test will pass. If they don't match, either the test runner found a bug in your code that should be fixed, or the implementation has changed and the snapshot needs to be updated (-u option).
 - the snapshot should be committed alongside code changes, and reviewed as part of your code review process
 
-\***\*\*\*\*\*\*** Testing Redux
-Testing React Components
+---------------- Testing Redux ----------------
+
+# Testing React Component
 
 - Presentational compon: test markup (given some props, expect the output)
 - Connected (container) compon:
@@ -134,6 +135,10 @@ Testing React Components
   2 options:
   - wrap the comp into <Provider> and pass the store
   - add named export to the unconnected component and import it the test file (not the connected comp)
+
+# Testing Action Creators
+
+- assure the action creator returns the expected action
 
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 

@@ -27,7 +27,7 @@ it("sets error when attempting to save an empty field title", () => {
   const wrapper = render();
   wrapper.find("form").simulate("submit"); // simulate submitting an empty form with enzyme - error should appear
   const error = wrapper.find(".alert").first(); // find the error by class 'alert', take the first err
-  error.debug();
+  // error.debug();
   expect(error.text()).toBe("Title required!"); // front-side validation
 });
 
