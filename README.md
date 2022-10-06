@@ -140,6 +140,8 @@ Mock API
 
 - assure the action creator returns the expected action
 
+# Testing Thunks
+
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
 ## Get Started

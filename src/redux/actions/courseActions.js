@@ -18,7 +18,7 @@ export function createCourseSuccess(course) {
 export function deleteCourseOptimistic(course) {
   return { type: types.DELETE_COURSE_OPTIMISTIC, course };
 }
-//thunk fn to fetch courses async (get request)
+//Thunk fn to fetch courses async (get request)
 export function loadCourses() {
   return function (dispatch) {
     dispatch(beginApiCall());
