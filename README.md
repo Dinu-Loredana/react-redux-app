@@ -142,6 +142,14 @@ Mock API
 
 # Testing Thunks
 
+thunks = async => mocking store + http calls
+Mock store => redux-mock-store
+Mock HTTP Requests => fetch-mock
+
+# Testing Reducers
+
+given this input, assert this output
+
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
 ## Get Started
