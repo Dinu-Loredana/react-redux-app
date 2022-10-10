@@ -150,6 +150,11 @@ Mock HTTP Requests => fetch-mock
 
 given this input, assert this output
 
+# Testing Store
+
+it's an integration test, rather than unit test.
+test interaction between action creators, store and reducer together
+
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
 ## Get Started
