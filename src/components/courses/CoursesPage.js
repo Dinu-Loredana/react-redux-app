@@ -52,10 +52,16 @@ class CoursesPage extends React.Component {
             >
               Add Course
             </button>
-            <CourseList
-              courses={this.props.courses}
-              onDeleteClick={this.handleDeleteCourse}
-            />
+            {this.props.courses.length > 0 ? (
+              <CourseList
+                courses={this.props.courses}
+                onDeleteClick={this.handleDeleteCourse}
+              />
+            ) : (
+              <h4 className="add-course" style={{ textAlign: "center" }}>
+                No courses available.
+              </h4>
+            )}
           </>
         )}
       </>
@@ -83,6 +89,7 @@ function mapStateToProps(state) {
                 .name,
             };
           }),
+
     authors: state.authors,
     loading: state.apiCallsInProgress > 0,
   };
