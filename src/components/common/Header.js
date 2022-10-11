@@ -30,7 +30,7 @@ const Header = ({ courses }) => {
       </nav>
       {courses.length > 0 && (
         <div>
-          <h6>Courses: {courses?.length}</h6>
+          <h6>Courses Available: {courses?.length}</h6>
         </div>
       )}
     </div>
