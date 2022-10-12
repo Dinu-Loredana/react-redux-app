@@ -9,6 +9,7 @@ import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
 import { Spinner } from "../common/Spinner";
 import { toast } from "react-toastify";
+import useUnsavedChangesWarning from "../../hooks/useUnsavedChangesWarning";
 
 export function ManageCoursePage({
   //export unconnected component
@@ -23,7 +24,8 @@ export function ManageCoursePage({
   const [course, setCourse] = useState({ ...props.course }); //copy the course passed in on props to state (empty course initially cuz courses aren't available- on load)
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
-  console.log("props", props);
+  const [routerPrompt, setFormState] = useUnsavedChangesWarning();
+
   // fetch courses and authors when comp is mounted
   useEffect(() => {
     if (courses.length === 0) {
@@ -42,6 +44,7 @@ export function ManageCoursePage({
       ...prevCourse,
       [name]: name === "authorId" ? parseInt(value, 10) : value,
     }));
+    setFormState("modified");
   }
   // Implement client-side form validation for instant feedback, not to wait for server validation, good UX
   function formIsValid() {
@@ -68,19 +71,23 @@ export function ManageCoursePage({
         setSaving(false); // user can try resubmit the form after an err occurs
         setErrors({ onSave: error.message });
       });
+    setFormState("unchanged");
   }
 
   return authors.length === 0 || courses.length === 0 ? (
     <Spinner />
   ) : (
-    <CourseForm
-      course={course}
-      errors={errors}
-      authors={authors}
-      onChange={handleChange}
-      onSave={handleSave}
-      saving={saving}
-    />
+    <>
+      <CourseForm
+        course={course}
+        errors={errors}
+        authors={authors}
+        onChange={handleChange}
+        onSave={handleSave}
+        saving={saving}
+      />
+      {routerPrompt}
+    </>
   );
 }
 
@@ -100,7 +107,7 @@ function getCourseBySlug(courses, slug) {
 
 function mapStateToProps(state, ownProps) {
   // console.log(ownProps)
-  const slug = ownProps.match.params.slug; // read slug from url data beign passed by React Router
+  const slug = ownProps.match.params.slug; // read slug from url data being passed by React Router
   const course =
     slug && state.courses.length > 0 // getCourseBySlug is called after courses are available, mapStateToProps is called every time redux store changes
       ? getCourseBySlug(state.courses, slug)

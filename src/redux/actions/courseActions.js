@@ -18,17 +18,19 @@ export function createCourseSuccess(course) {
 export function deleteCourseOptimistic(course) {
   return { type: types.DELETE_COURSE_OPTIMISTIC, course };
 }
-//Thunk fn to fetch courses async (get request)
+//Thunk - write action creators that return a function to fetch courses async (get request), instead of an action (object)
 export function loadCourses() {
+  //loadCourses action creator returns a function instead of the regular action object.
   return function (dispatch) {
-    dispatch(beginApiCall());
+    //the fn receives the dispatch method from the store.
+    dispatch(beginApiCall()); //first dispatch an immediate synchronous action to the store to indicate that you’ve started the API call
     return courseApi
-      .getCourses()
+      .getCourses() //make the actual GET request to the server
       .then((courses) => {
-        dispatch(loadCoursesSuccess(courses)); //dispatch actions asynch
+        dispatch(loadCoursesSuccess(courses)); // successful resp from the server, you dispatch a synchronous success action with the data received from the response
       })
       .catch((error) => {
-        dispatch(apiCallError(error));
+        dispatch(apiCallError(error)); //failure resp,  dispatch a different synchronous action with the error message
         throw error;
       });
   };
