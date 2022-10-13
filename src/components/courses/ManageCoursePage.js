@@ -73,11 +73,14 @@ export function ManageCoursePage({
       });
     setFormState("unchanged");
   }
-
+  console.log(course);
   return authors.length === 0 || courses.length === 0 ? (
     <Spinner />
   ) : (
     <>
+      {Object.keys(course).length === 0 && (
+        <h4 style={{ textAlign: "center" }}>Course not available.</h4>
+      )}
       <CourseForm
         course={course}
         errors={errors}
@@ -106,13 +109,11 @@ function getCourseBySlug(courses, slug) {
 }
 
 function mapStateToProps(state, ownProps) {
-  // console.log(ownProps)
   const slug = ownProps.match.params.slug; // read slug from url data being passed by React Router
   const course =
     slug && state.courses.length > 0 // getCourseBySlug is called after courses are available, mapStateToProps is called every time redux store changes
       ? getCourseBySlug(state.courses, slug)
       : newCourse;
-  //   console.log(course);
   return {
     course,
     courses: state.courses,
