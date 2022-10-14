@@ -82,13 +82,15 @@ function mapStateToProps(state) {
     courses:
       state.authors.length === 0
         ? []
-        : state.courses.map((course) => {
-            return {
-              ...course,
-              authorName: state.authors.find((a) => a.id === course.authorId)
-                .name,
-            };
-          }),
+        : state.courses
+            .map((course) => {
+              return {
+                ...course,
+                authorName: state.authors.find((a) => a.id === course.authorId)
+                  .name,
+              };
+            })
+            .sort((c1, c2) => c1.title.localeCompare(c2.title)),
 
     authors: state.authors,
     loading: state.apiCallsInProgress > 0,
