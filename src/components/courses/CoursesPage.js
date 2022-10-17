@@ -8,6 +8,7 @@ import CourseList from "./CourseList";
 import { Redirect } from "react-router-dom";
 import { Spinner } from "../common/Spinner";
 import { toast } from "react-toastify";
+import { selectSortedCourses } from "../../redux/reducers";
 
 class CoursesPage extends React.Component {
   state = {
@@ -37,6 +38,7 @@ class CoursesPage extends React.Component {
   };
   // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
   render() {
+    console.log(this.props.courses);
     return (
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
@@ -82,15 +84,14 @@ function mapStateToProps(state) {
     courses:
       state.authors.length === 0
         ? []
-        : state.courses
-            .map((course) => {
-              return {
-                ...course,
-                authorName: state.authors.find((a) => a.id === course.authorId)
-                  .name,
-              };
-            })
-            .sort((c1, c2) => c1.title.localeCompare(c2.title)),
+        : selectSortedCourses(state).map((course) => {
+            //no need to piece of state need to pass to the selector
+            return {
+              ...course,
+              authorName: state.authors.find((a) => a.id === course.authorId)
+                .name,
+            };
+          }),
 
     authors: state.authors,
     loading: state.apiCallsInProgress > 0,

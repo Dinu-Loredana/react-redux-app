@@ -157,6 +157,18 @@ test interaction between action creators, store and reducer together
 
 ---
 
+# Selectors in Redux
+
+- are not technically part of Redux itself.
+- a function that takes the current application state and returns the relevant portion needed by the view (sorting, filtering, display data in a different way in the UI than it is saved in state).
+- used for computing derivated data or relational data (takes in the whole redux state and return the piece of state neeeded and manipulated)
+- centralize all selectors in root reducer (reducer/index.js);any comp that access data via selectors doesn't need to know in which file the selectors are defined
+
+- recalculate the data every time they are called -> memoization: save the cached result of func when the fn is called again with the same param
+- use Reselect library - specify which parts of the state are used for the computation and if these parts of the state are not changed it won't recalculate the derivate data, justreturns the cached result
+  // in the connected component use the selector in mapStateToProps to get the desired data
+  More: https://www.youtube.com/watch?v=frT3to2ACCw
+
 # Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
 
 ## Get Started
