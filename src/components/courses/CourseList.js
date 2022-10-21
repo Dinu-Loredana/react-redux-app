@@ -1,56 +1,68 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const CourseList = ({ courses, onDeleteClick }) => {
-  const [selectedAuthor, setSelectedAuthor] = useState("All");
-  const uniqueAuthor = ["All", ...new Set(courses.map((c) => c.authorName))];
-  const [filteredCoursesByAuthor, setFilteredCoursesByAuthor] =
-    useState(courses);
+const CourseList = ({ courses, onDeleteClick, onSort }) => {
+  // const [selectedAuthor, setSelectedAuthor] = useState("All");
+  // const uniqueAuthor = ["All", ...new Set(courses.map((c) => c.authorName))];
+  // const [filteredCoursesByAuthor, setFilteredCoursesByAuthor] =
+  //   useState(courses);
 
-  const handleChange = (event) => {
-    setSelectedAuthor(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setSelectedAuthor(event.target.value);
+  // };
 
-  const getFilteredCourses = () => {
-    if (selectedAuthor !== "All") {
-      const filteredData = courses.filter(
-        (c) => c.authorName === selectedAuthor
-      );
-      setFilteredCoursesByAuthor(filteredData);
-    } else {
-      setFilteredCoursesByAuthor(courses);
-    }
-  };
+  // const getFilteredCourses = () => {
+  //   if (selectedAuthor !== "All") {
+  //     const filteredData = courses.filter(
+  //       (c) => c.authorName === selectedAuthor
+  //     );
+  //     setFilteredCoursesByAuthor(filteredData);
+  //   } else {
+  //     setFilteredCoursesByAuthor(courses);
+  //   }
+  // };
 
-  useEffect(() => {
-    getFilteredCourses();
-  }, [selectedAuthor]);
+  // useEffect(() => {
+  //   getFilteredCourses();
+  // }, [selectedAuthor]);
 
   return (
     <table className="table">
       <thead>
         <tr>
           <th />
-          <th>Title</th>
-          <th>
-            <label>
-              Author
-              <select value={selectedAuthor} onChange={handleChange}>
-                {uniqueAuthor?.map((author) => (
-                  <option key={author} value={author}>
-                    {author}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <th
+            onClick={() => onSort("title")}
+            // dir={(sort && sort.order) || undefined}
+          >
+            <label style={{ cursor: "pointer" }}>Title</label>
           </th>
-          <th>Category</th>
+          <th
+            onClick={() => onSort("authorName")}
+            // dir={(sort && sort.order) || undefined}
+          >
+            <label style={{ cursor: "pointer" }}>Author</label>
+
+            {/* <select value={selectedAuthor} onChange={handleChange}>
+              {uniqueAuthor?.map((author) => (
+                <option key={author} value={author}>
+                  {author}
+                </option>
+              ))}
+            </select> */}
+          </th>
+          <th
+            onClick={() => onSort("category")}
+            // dir={(sort && sort.order) || undefined}
+          >
+            <label style={{ cursor: "pointer" }}>Category</label>
+          </th>
           <th />
         </tr>
       </thead>
       <tbody>
-        {filteredCoursesByAuthor?.map((course) => {
+        {courses?.map((course) => {
           return (
             <tr key={course.id}>
               <td>
@@ -85,6 +97,8 @@ const CourseList = ({ courses, onDeleteClick }) => {
 CourseList.propTypes = {
   courses: PropTypes.array.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
+  onSort: PropTypes.func.isRequired,
+  sort: PropTypes.object.isRequired,
 };
 
 export default CourseList;

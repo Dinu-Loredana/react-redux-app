@@ -18,6 +18,7 @@ export function createCourseSuccess(course) {
 export function deleteCourseOptimistic(course) {
   return { type: types.DELETE_COURSE_OPTIMISTIC, course };
 }
+
 //Thunk - write action creators that return a function to fetch courses async (get request), instead of an action (object)
 export function loadCourses() {
   //loadCourses action creator returns a function instead of the regular action object.
