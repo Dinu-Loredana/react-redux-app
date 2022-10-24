@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { SortableTableHeader } from "./SortableTableHeader";
 
-const CourseList = ({ courses, onDeleteClick, onSort }) => {
+const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
   // const [selectedAuthor, setSelectedAuthor] = useState("All");
   // const uniqueAuthor = ["All", ...new Set(courses.map((c) => c.authorName))];
   // const [filteredCoursesByAuthor, setFilteredCoursesByAuthor] =
@@ -28,21 +29,24 @@ const CourseList = ({ courses, onDeleteClick, onSort }) => {
   // }, [selectedAuthor]);
 
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th />
-          <th
-            onClick={() => onSort("title")}
-            // dir={(sort && sort.order) || undefined}
-          >
-            <label style={{ cursor: "pointer" }}>Title</label>
-          </th>
-          <th
-            onClick={() => onSort("authorName")}
-            // dir={(sort && sort.order) || undefined}
-          >
-            <label style={{ cursor: "pointer" }}>Author</label>
+    <div className="table">
+      <table>
+        <thead>
+          <tr>
+            <SortableTableHeader
+              label="Title"
+              sortKey="title"
+              sort={sort}
+              onSort={onSort}
+              onSortClear={onSortClear}
+            />
+            <SortableTableHeader
+              label="Author"
+              sortKey="authorName"
+              sort={sort}
+              onSort={onSort}
+              onSortClear={onSortClear}
+            />
 
             {/* <select value={selectedAuthor} onChange={handleChange}>
               {uniqueAuthor?.map((author) => (
@@ -51,46 +55,39 @@ const CourseList = ({ courses, onDeleteClick, onSort }) => {
                 </option>
               ))}
             </select> */}
-          </th>
-          <th
-            onClick={() => onSort("category")}
-            // dir={(sort && sort.order) || undefined}
-          >
-            <label style={{ cursor: "pointer" }}>Category</label>
-          </th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        {courses?.map((course) => {
-          return (
-            <tr key={course.id}>
-              <td>
-                <a
-                  className="btn btn-light"
-                  href={"http://pluralsight.com/courses/" + course.slug}
-                >
-                  Watch
-                </a>
-              </td>
-              <td>
-                <Link to={"/course/" + course.slug}>{course.title}</Link>
-              </td>
-              <td>{course.authorName}</td>
-              <td>{course.category}</td>
-              <td>
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={() => onDeleteClick(course)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+            <SortableTableHeader
+              label="Category"
+              sortKey="category"
+              sort={sort}
+              onSort={onSort}
+              onSortClear={onSortClear}
+            />
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {courses?.map((course) => {
+            return (
+              <tr key={course.id}>
+                <td>
+                  <Link to={"/course/" + course.slug}>{course.title}</Link>
+                </td>
+                <td>{course.authorName}</td>
+                <td>{course.category}</td>
+                <td>
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={() => onDeleteClick(course)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
@@ -98,6 +95,7 @@ CourseList.propTypes = {
   courses: PropTypes.array.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
+  onSortClear: PropTypes.func.isRequired,
   sort: PropTypes.object.isRequired,
 };
 

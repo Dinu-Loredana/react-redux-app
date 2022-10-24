@@ -5,7 +5,7 @@ export function clearSortParams() {
   return {
     type: types.SET_SORT_PARAMS,
     payload: {
-      data: undefined,
+      data: { key: "", order: "" },
     },
   };
 }

@@ -17,6 +17,14 @@ export const getSortedCourses = createSelector(
       ...course,
       authorName: authorsMap[course.authorId]?.name || "loading",
     })); //state.authors?.find((a) => a.id === c.authorId)
-    return orderBy(authorsAddedToCourses, [sortParams.key], [sortParams.order]);
+
+    if (sortParams.key !== "") {
+      return orderBy(
+        authorsAddedToCourses,
+        [sortParams.key],
+        [sortParams.order]
+      );
+    }
+    return authorsAddedToCourses;
   }
 );

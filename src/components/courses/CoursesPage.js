@@ -17,8 +17,8 @@ class CoursesPage extends React.Component {
     redirectToAddCoursePage: false,
   };
   componentDidMount() {
-    const { courses, authors, actions } = this.props;
-    if (courses?.length === 0) {
+    const { coursesList, authors, actions } = this.props;
+    if (coursesList?.length === 0) {
       actions
         .loadCourses()
         .catch((error) => alert("Error fetching courses" + error));
@@ -41,7 +41,7 @@ class CoursesPage extends React.Component {
   // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
 
   render() {
-    console.log("COURSES", this.props.courses);
+    console.log("coursesList", this.props.coursesList);
     console.log("SORT PARAMS", this.props.sortParams);
     console.log("PROPS", this.props);
     return (
@@ -59,9 +59,9 @@ class CoursesPage extends React.Component {
             >
               Add Course
             </button>
-            {this.props.courses?.length > 0 ? (
+            {this.props.coursesList?.length > 0 ? (
               <CourseList
-                courses={this.props.courses}
+                courses={this.props.coursesList}
                 onDeleteClick={this.handleDeleteCourse}
                 sort={this.props.sortParams}
                 onSort={(key) => this.props.actions.setSortParams(key)}
@@ -80,7 +80,7 @@ class CoursesPage extends React.Component {
 }
 
 CoursesPage.propTypes = {
-  courses: PropTypes.array.isRequired,
+  coursesList: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
@@ -91,8 +91,9 @@ CoursesPage.propTypes = {
 };
 
 function mapStateToProps(state) {
+  console.log("state mapStateToProps", state);
   return {
-    courses: getSortedCourses(state),
+    coursesList: getSortedCourses(state),
     authors: state?.authors,
     loading: state?.apiCallsInProgress > 0,
     sortParams: sortSelector(state),

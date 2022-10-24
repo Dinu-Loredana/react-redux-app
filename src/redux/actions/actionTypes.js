@@ -7,6 +7,7 @@ export const BEGIN_API_CALL = "BEGIN_API_CALL";
 export const API_CALL_ERROR = "API_CALL_ERROR";
 export const DELETE_COURSE_OPTIMISTIC = "DELETE_COURSE_OPTIMISTIC";
 export const SET_SORT_PARAMS = "SET_SORT_PARAMS";
+
 /*
 By convension, action types ended in "_SUCCESS" are the result of api call succesfully.
 Since it's an optimistic delete (positive case), we are omiting the loading state.
