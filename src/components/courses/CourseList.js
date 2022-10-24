@@ -29,7 +29,7 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
   // }, [selectedAuthor]);
 
   return (
-    <div className="table">
+    <div className="container">
       <table>
         <thead>
           <tr>

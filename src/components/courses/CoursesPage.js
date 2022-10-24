@@ -10,6 +10,7 @@ import { Redirect } from "react-router-dom";
 import { Spinner } from "../common/Spinner";
 import { toast } from "react-toastify";
 import { getSortedCourses, sortSelector } from "../../selectors";
+import { SortInfo } from "./SortInfo";
 // import { selectSortedCourses } from "../../redux/reducers";
 
 class CoursesPage extends React.Component {
@@ -41,9 +42,6 @@ class CoursesPage extends React.Component {
   // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
 
   render() {
-    console.log("coursesList", this.props.coursesList);
-    console.log("SORT PARAMS", this.props.sortParams);
-    console.log("PROPS", this.props);
     return (
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
@@ -58,6 +56,10 @@ class CoursesPage extends React.Component {
             >
               Add New Course
             </button>
+            <SortInfo
+              sort={this.props.sortParams}
+              onSortClear={this.props.actions.clearSortParams}
+            />
             {this.props.coursesList?.length > 0 ? (
               <CourseList
                 courses={this.props.coursesList}
