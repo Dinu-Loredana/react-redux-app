@@ -7,30 +7,23 @@ const Header = ({ courses }) => {
   const activeStyle = { color: "#F15B2A" };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <div className="header-container">
       <nav>
         <NavLink to="/" activeStyle={activeStyle} exact>
           Home
         </NavLink>
-        {" | "}
+
         <NavLink to="/courses" activeStyle={activeStyle}>
           Courses
         </NavLink>
-        {" | "}
+
         <NavLink to="/about" activeStyle={activeStyle}>
           About
         </NavLink>
       </nav>
       {courses.length > 0 && (
         <div>
-          <h6>Courses Available: {courses?.length}</h6>
+          <p>Courses: {courses?.length}</p>
         </div>
       )}
     </div>

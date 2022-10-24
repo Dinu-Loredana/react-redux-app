@@ -65,6 +65,7 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
             <th>Action</th>
           </tr>
         </thead>
+
         <tbody>
           {courses?.map((course) => {
             return (
