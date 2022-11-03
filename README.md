@@ -114,7 +114,16 @@ Mock API
       "\\.(css|less)$": "<rootDir>/tools/styleMock.js"
   // tells jest how to handle dif files, to ignore these imports
   }
-  }, \***\*\*\*\*\*\*\***Snapshot testing
+  }
+  - ----- Configure Jest Coverage Report in package.json --------
+    add to jest configuration:
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+    "<rootDir>/src/**/*.{js,jsx}"
+    ]
+    add to script to generate report:
+    "test": "jest --coverage --watchAll=false",  
+    \***\*\*\*\*\*\*\***Snapshot testing
 - useful when you don't want your app UI to change unexpectedly, document expecting output and regression testing production.
 - store a record of a component's output.
 - value of snapshot test is pointing out any time the react compon changes it's view (test will fail if the comp view doesn't match with the snapshot saved)

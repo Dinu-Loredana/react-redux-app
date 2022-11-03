@@ -58,6 +58,11 @@ class CoursesPage extends React.Component {
             >
               Add New Course
             </button>
+            {this.props.coursesList.length > 0 && (
+              <div>
+                <p>Courses: {this.props.coursesList?.length}</p>
+              </div>
+            )}
             <SortInfo
               sort={this.props.sortParams}
               onSortClear={this.props.actions.clearSortParams}

@@ -6,7 +6,7 @@
     "start:dev": "webpack serve --config webpack.config.dev.js --port 3000",
     "prestart:api": "node tools/createMockDb.js",
     "start:api": "node tools/apiServer.js",
-    "test": "jest --coverage --watchAll=false",
+    "test": "jest --watchAll",
     "test:ci": "jest",
     "clean:build": "rimraf ./build && mkdir build",
     "prebuild": "run-p clean:build test:ci",
@@ -17,6 +17,10 @@
   "jest": {
     "setupFiles": [
       "./tools/testSetup.js"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.{js,jsx}"
     ],
     "testEnvironment": "jsdom",
     "moduleNameMapper": {
@@ -40,6 +44,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.14.6",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.0.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.2",
     "babel-eslint": "10.1.0",

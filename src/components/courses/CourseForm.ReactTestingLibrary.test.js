@@ -30,8 +30,9 @@ it("should have label 'Save' when saving is false", () => {
 });
 
 it("should have label 'Saving...' when saving is true", () => {
-  const { getByText, debug } = renderCourseForm({ saving: true });
-  debug();
+  const { getByText } = renderCourseForm({ saving: true });
+  // const { getByText, debug } = renderCourseForm({ saving: true });
+  // debug();
   getByText("Saving...");
 });
 
