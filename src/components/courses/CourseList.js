@@ -5,7 +5,7 @@ import { SortableTableHeader } from "./SortableTableHeader";
 
 const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
   // const [selectedAuthor, setSelectedAuthor] = useState("All");
-  // const uniqueAuthor = ["All", ...new Set(courses.map((c) => c.authorName))];
+  //const uniqueAuthor = ["All", ...new Set(courses.map((c) => c.authorName))];
   // const [filteredCoursesByAuthor, setFilteredCoursesByAuthor] =
   //   useState(courses);
 
@@ -28,6 +28,9 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
   //   getFilteredCourses();
   // }, [selectedAuthor]);
 
+  // console.log("filteredCoursesByAuthor", filteredCoursesByAuthor);
+
+  // console.log("filteredAuthor", filteredAuthor);
   return (
     <div className="container">
       <table>
@@ -40,21 +43,7 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
               onSort={onSort}
               onSortClear={onSortClear}
             />
-            <SortableTableHeader
-              label="Author"
-              sortKey="authorName"
-              sort={sort}
-              onSort={onSort}
-              onSortClear={onSortClear}
-            />
 
-            {/* <select value={selectedAuthor} onChange={handleChange}>
-              {uniqueAuthor?.map((author) => (
-                <option key={author} value={author}>
-                  {author}
-                </option>
-              ))}
-            </select> */}
             <SortableTableHeader
               label="Category"
               sortKey="category"
@@ -63,6 +52,33 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
               onSortClear={onSortClear}
             />
             <th>Action</th>
+            <SortableTableHeader
+              label="Author"
+              sortKey="authorName"
+              sort={sort}
+              onSort={onSort}
+              onSortClear={onSortClear}
+            />
+            {/* <th>
+              <label>Filter</label>
+              <select
+                value={filteredAuthor}
+                onClick={(e) => onFilterAuthor(e.target.value)}
+              >
+                {uniqueAuthor?.map((author) => (
+                  <option key={author} value={author}>
+                    {author}
+                  </option>
+                ))}
+              </select> */}
+            {/* <select value={selectedAuthor} onChange={handleChange}>
+                {uniqueAuthor?.map((author) => (
+                  <option key={author} value={author}>
+                    {author}
+                  </option>
+                ))}
+              </select> */}
+            {/* </th> */}
           </tr>
         </thead>
 
@@ -73,8 +89,9 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
                 <td>
                   <Link to={"/course/" + course.slug}>{course.title}</Link>
                 </td>
-                <td>{course.authorName}</td>
+
                 <td>{course.category}</td>
+
                 <td>
                   <button
                     className="btn btn-outline-danger"
@@ -83,6 +100,7 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
                     Delete
                   </button>
                 </td>
+                <td>{course.authorName}</td>
               </tr>
             );
           })}
@@ -98,6 +116,8 @@ CourseList.propTypes = {
   onSort: PropTypes.func.isRequired,
   onSortClear: PropTypes.func.isRequired,
   sort: PropTypes.object.isRequired,
+  filteredAuthor: PropTypes.string,
+  onFilterAuthor: PropTypes.func,
 };
 
 export default CourseList;

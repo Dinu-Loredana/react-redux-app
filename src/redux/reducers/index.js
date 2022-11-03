@@ -3,12 +3,14 @@ import courses from "./courseReducer";
 import authors from "./authorReducer";
 import apiCallsInProgress from "./apiStatusReducer";
 import sortParams from "./sortReducer";
+import filteredAuthor from "./filterReducer"; //filterAuthor
 
 const rootReducer = combineReducers({
   courses,
   authors,
   apiCallsInProgress,
   sortParams,
+  filteredAuthor,
 });
 
 export default rootReducer;

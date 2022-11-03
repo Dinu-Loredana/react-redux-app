@@ -3,4 +3,5 @@ export default {
   authors: [],
   apiCallsInProgress: 0,
   sortParams: { key: "", order: "" },
+  filteredAuthor: "",
 };

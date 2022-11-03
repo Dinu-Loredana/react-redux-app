@@ -2,6 +2,7 @@ import React from "react";
 import { ManageCoursePage } from "./ManageCoursePage";
 import { authors, courses, newCourse } from "../../../tools/mockData";
 import { mount } from "enzyme";
+import { MemoryRouter } from "react-router-dom";
 
 // factory function to call React comp with default values (keeps tests simple, avoid repeating it for each test);
 // pass in all the prop the comp requires, including the ones injected by redux.
@@ -17,7 +18,11 @@ function render(args) {
     saveCourse: () => {},
   };
   const props = { ...defaultProps, ...args };
-  return mount(<ManageCoursePage {...props} />); // render the comp and its children in the memory
+  return mount(
+    <MemoryRouter>
+      <ManageCoursePage {...props} />
+    </MemoryRouter>
+  ); // render the comp and its children in the memory
 }
 
 // use mount so the child compon is rendered too to test the comp interactions with its child compon (CourseForm) - title input of the form

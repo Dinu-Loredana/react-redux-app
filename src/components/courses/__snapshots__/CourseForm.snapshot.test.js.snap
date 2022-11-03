@@ -4,10 +4,16 @@ exports[`sets submit label button to 'Save' when saving is false 1`] = `
 <form
   onSubmit={[MockFunction]}
 >
-  <h2>
+  <h6
+    style={
+      Object {
+        "textAlign": "center",
+      }
+    }
+  >
     Edit
      Course
-  </h2>
+  </h6>
   <div
     className="form-group"
   >
@@ -102,10 +108,16 @@ exports[`sets submit label button to 'Saving...' when saving is true 1`] = `
 <form
   onSubmit={[MockFunction]}
 >
-  <h2>
+  <h6
+    style={
+      Object {
+        "textAlign": "center",
+      }
+    }
+  >
     Edit
      Course
-  </h2>
+  </h6>
   <div
     className="form-group"
   >

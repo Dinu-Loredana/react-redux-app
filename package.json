@@ -6,7 +6,7 @@
     "start:dev": "webpack serve --config webpack.config.dev.js --port 3000",
     "prestart:api": "node tools/createMockDb.js",
     "start:api": "node tools/apiServer.js",
-    "test": "jest --watch",
+    "test": "jest --coverage --watchAll=false",
     "test:ci": "jest",
     "clean:build": "rimraf ./build && mkdir build",
     "prebuild": "run-p clean:build test:ci",

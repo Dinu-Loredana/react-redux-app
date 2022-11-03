@@ -20,7 +20,7 @@ it("should render form and header", () => {
   const wrapper = renderCourseForm(); // render the component with default props
   // console.log(wrapper.debug())
   expect(wrapper.find("form").length).toBe(1); //FIND func accepts CSS selector
-  expect(wrapper.find("h2").text()).toEqual("Add Course"); // find by tag name
+  expect(wrapper.find("h6").text()).toEqual("Add Course"); // find by tag name
 });
 
 it("should have label 'Save' when saving is false", () => {

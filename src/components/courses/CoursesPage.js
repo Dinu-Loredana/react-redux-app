@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorsActions from "../../redux/actions/authorActions";
 import * as sortActions from "../../redux/actions/sortActions";
+import * as filterActions from "../../redux/actions/filterActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
@@ -42,6 +43,7 @@ class CoursesPage extends React.Component {
   // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
 
   render() {
+    console.log("COURSES", this.props.coursesList);
     return (
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
@@ -67,6 +69,8 @@ class CoursesPage extends React.Component {
                 sort={this.props.sortParams}
                 onSort={(key) => this.props.actions.setSortParams(key)}
                 onSortClear={() => this.props.actions.clearSortParams()}
+                onFilterAuthor={(a) => this.props.actions.setFilteredAuthor(a)}
+                filteredAuthor={this.props.filteredAuthor}
               />
             ) : (
               <h4 className="add-course" style={{ textAlign: "center" }}>
@@ -89,6 +93,8 @@ CoursesPage.propTypes = {
   setSortParams: PropTypes.func.isRequired,
   clearSortParams: PropTypes.func.isRequired,
   sortParams: PropTypes.object.isRequired,
+  setFilteredAuthor: PropTypes.func,
+  filteredAuthor: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -98,6 +104,7 @@ function mapStateToProps(state) {
     authors: state?.authors,
     loading: state?.apiCallsInProgress > 0,
     sortParams: sortSelector(state),
+    filteredAuthor: state.filteredAuthor,
   };
 }
 
@@ -110,6 +117,10 @@ function mapDispatchToProps(dispatch) {
       setSortParams: bindActionCreators(sortActions.setSortParams, dispatch),
       clearSortParams: bindActionCreators(
         sortActions.clearSortParams,
+        dispatch
+      ),
+      setFilteredAuthor: bindActionCreators(
+        filterActions.setFilterAuthor,
         dispatch
       ),
     },

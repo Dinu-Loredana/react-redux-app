@@ -1,4 +1,5 @@
 Steps to configure Redux and Redux Thunk
+// "test": "jest --watch",
 
 1. create CoursesPage (form with handleChange, handleSubmit)
 2. create CreateCourse action type into actions/actionTypes.js

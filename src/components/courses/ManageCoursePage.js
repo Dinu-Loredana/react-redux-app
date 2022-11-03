@@ -73,7 +73,6 @@ export function ManageCoursePage({
       });
     setFormState("unchanged");
   }
-  console.log(course);
   return authors.length === 0 || courses.length === 0 ? (
     <Spinner />
   ) : (
