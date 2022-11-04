@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 // import { shallow, mount } from "enzyme";
 import { MemoryRouter } from "react-router-dom"; // cuz Header expects to run as a child of React Router & receives its props; not needed for shallow cuz it's not actually rendering the component
 import { Provider } from "react-redux";
