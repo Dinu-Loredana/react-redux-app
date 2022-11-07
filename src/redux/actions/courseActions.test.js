@@ -25,7 +25,7 @@ describe("async actions", () => {
       // declare the actions expected to be fired from the thunk
       const expectedActions = [
         { type: types.BEGIN_API_CALL },
-        { type: types.LOAD_COURSE_SUCCESS, courses },
+        { type: types.LOAD_COURSES_SUCCESS, courses },
       ];
 
       //create mock redux store

@@ -4,7 +4,7 @@ import { beginApiCall, apiCallError } from "../actions/apiStatusActions";
 
 // action creators (triggers the reducer by dispatching an action type)
 export function loadCoursesSuccess(courses) {
-  return { type: types.LOAD_COURSE_SUCCESS, courses };
+  return { type: types.LOAD_COURSES_SUCCESS, courses };
 }
 
 export function updateCourseSuccess(course) {
