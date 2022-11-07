@@ -21,14 +21,14 @@ export const getSortedCourses = createSelector(
     }));
 
     // order courses without lodash, with sort method
-    if (sortParams.key !== "") {
-      if (sortParams.order === "desc") {
+    if (sortParams?.key !== "") {
+      if (sortParams?.order === "desc") {
         return [
           ...authorsAddedToCourses.sort((c1, c2) => {
             return c1[sortParams?.key] > c2[sortParams?.key] ? -1 : 0; // desc
           }),
         ];
-      } else if (sortParams.order === "asc") {
+      } else if (sortParams?.order === "asc") {
         return [
           ...authorsAddedToCourses.sort((c1, c2) => {
             return c1[sortParams?.key] < c2[sortParams?.key] ? -1 : 0; // asc

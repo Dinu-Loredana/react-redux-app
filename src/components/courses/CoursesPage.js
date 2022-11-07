@@ -43,7 +43,6 @@ class CoursesPage extends React.Component {
   // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
 
   render() {
-    console.log("COURSES", this.props.coursesList);
     return (
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
@@ -95,15 +94,14 @@ CoursesPage.propTypes = {
   actions: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   handleDeleteCourse: PropTypes.func.isRequired,
-  setSortParams: PropTypes.func.isRequired,
-  clearSortParams: PropTypes.func.isRequired,
-  sortParams: PropTypes.object.isRequired,
+  setSortParams: PropTypes.func,
+  clearSortParams: PropTypes.func,
+  sortParams: PropTypes.object,
   setFilteredAuthor: PropTypes.func,
   filteredAuthor: PropTypes.string,
 };
 
 function mapStateToProps(state) {
-  console.log("state mapStateToProps", state);
   return {
     coursesList: getSortedCourses(state),
     authors: state?.authors,
