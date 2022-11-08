@@ -19,7 +19,7 @@ export function deleteCourseOptimistic(course) {
   return { type: types.DELETE_COURSE_OPTIMISTIC, course };
 }
 
-//Thunk - write action creators that return a function to fetch courses async (get request), instead of an action (object)
+//Thunk action creator - returns a function to fetch courses async (get request), instead of an action (object) Since it returns a function it is a special action that is intercepted by redux-thunk middleware. That thunk action creator can dispatch the other action creators at a point in the future.
 export function loadCourses() {
   //loadCourses action creator returns a function instead of the regular action object.
   return function (dispatch) {
