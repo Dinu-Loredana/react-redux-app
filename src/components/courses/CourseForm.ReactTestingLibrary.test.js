@@ -1,6 +1,7 @@
 import React from "react";
 import CourseForm from "./CourseForm";
 import { render } from "@testing-library/react";
+import "@testing-library/jest-dom";
 
 // factory function to call React comp with default values (keeps tests simple, avoid repeating it for each test)
 function renderCourseForm(args) {
@@ -13,27 +14,45 @@ function renderCourseForm(args) {
     onChange: () => {},
   };
   const props = { ...defaultProps, ...args };
-  return render(<CourseForm {...props} />); // render the compon using shallow Enzyme and pass it the props needed
+  return render(<CourseForm {...props} />); // render the compon and pass it the props needed
 }
 
-it("should render 'Add Course' header ", () => {
-  const { getByText } = renderCourseForm();
-  getByText("Add Course");
-  //   const comp = renderCourseForm();
-  //   console.log(comp);
-  //   comp.getByText("Add Course");  // don't have to call expect
-});
+describe("CourseForm", () => {
+  it("should render 'Add Course' header ", () => {
+    const { getByText } = renderCourseForm();
+    getByText("Add Course");
+    //   const comp = renderCourseForm();
+    //   comp.getByText("Add Course");  // don't have to call expect
+  });
 
-it("should have label 'Save' when saving is false", () => {
-  const { getByText } = renderCourseForm();
-  getByText("Save");
-});
+  it("should have label 'Save' when saving is false", () => {
+    const { getByText } = renderCourseForm();
+    getByText("Save");
+  });
 
-it("should have label 'Saving...' when saving is true", () => {
-  const { getByText } = renderCourseForm({ saving: true });
-  // const { getByText, debug } = renderCourseForm({ saving: true });
-  // debug();
-  getByText("Saving...");
+  it("should have label 'Saving...' when saving is true", () => {
+    const { getByText } = renderCourseForm({ saving: true });
+    // const { getByText, debug } = renderCourseForm({ saving: true });
+    // debug();
+    getByText("Saving...");
+  });
+
+  it("should render errors onSave", async () => {
+    const { findByRole } = renderCourseForm({
+      errors: { onSave: "An error occured" },
+    });
+    const errorEl = await findByRole("alert");
+    expect(errorEl).toBeInTheDocument();
+  });
+  it("should have 2 inputs and 1 select", () => {
+    const { getByLabelText } = renderCourseForm();
+    const title = getByLabelText("Title");
+    const category = getByLabelText("Category");
+    const author = getByLabelText("Author");
+    expect(title).toBeInTheDocument();
+    expect(category).toBeInTheDocument();
+    expect(author).toBeInTheDocument();
+  });
 });
 
 /*

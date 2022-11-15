@@ -13,10 +13,10 @@ export const getSortedCourses = createSelector(
   (courses, authors, sortParams) => {
     if (!authors?.length) return [];
     //const authorsMap = keyBy(authors, "id");
-    const authorsAddedToCourses = courses.map((course) => ({
+    const authorsAddedToCourses = courses?.map((course) => ({
       ...course,
       authorName:
-        authors.find((a) => a.id === course.authorId)?.name || "loading",
+        authors?.find((a) => a.id === course.authorId)?.name || "loading",
       //authorName: authorsMap[course.authorId]?.name || "loading",
     }));
 

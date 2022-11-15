@@ -27,6 +27,7 @@ exports[`sets submit label button to 'Save' when saving is false 1`] = `
     >
       <input
         className="form-control"
+        id="title"
         name="title"
         onChange={[MockFunction]}
         type="text"
@@ -47,15 +48,11 @@ exports[`sets submit label button to 'Save' when saving is false 1`] = `
     >
       <select
         className="form-control"
+        id="authorId"
         name="authorId"
         onChange={[MockFunction]}
         value={1}
       >
-        <option
-          value=""
-        >
-          Select Author
-        </option>
         <option
           value={1}
         >
@@ -87,6 +84,7 @@ exports[`sets submit label button to 'Save' when saving is false 1`] = `
     >
       <input
         className="form-control"
+        id="category"
         name="category"
         onChange={[MockFunction]}
         type="text"
@@ -131,6 +129,7 @@ exports[`sets submit label button to 'Saving...' when saving is true 1`] = `
     >
       <input
         className="form-control"
+        id="title"
         name="title"
         onChange={[MockFunction]}
         type="text"
@@ -151,15 +150,11 @@ exports[`sets submit label button to 'Saving...' when saving is true 1`] = `
     >
       <select
         className="form-control"
+        id="authorId"
         name="authorId"
         onChange={[MockFunction]}
         value={1}
       >
-        <option
-          value=""
-        >
-          Select Author
-        </option>
         <option
           value={1}
         >
@@ -191,6 +186,7 @@ exports[`sets submit label button to 'Saving...' when saving is true 1`] = `
     >
       <input
         className="form-control"
+        id="category"
         name="category"
         onChange={[MockFunction]}
         type="text"

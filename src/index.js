@@ -8,14 +8,14 @@ import configureStore from "./redux/configureStore";
 import { Provider as ReduxProvider } from "react-redux";
 
 const store = configureStore();
-console.log("store", store);
 render(
-  // <React.StrictMode>
-  <ReduxProvider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </ReduxProvider>,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <ReduxProvider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </ReduxProvider>
+    ,
+  </React.StrictMode>,
   document.getElementById("app")
 );

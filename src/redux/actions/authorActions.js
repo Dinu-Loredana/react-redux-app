@@ -7,7 +7,7 @@ export function loadAuthorsSuccess(authors) {
   return { type: types.LOAD_AUTHOR_SUCCESS, authors };
 }
 
-//thunk - action creator - returns a function instead of an action
+//thunk action creator - returns a function instead of an action (that dispatches action types)
 export function loadAuthors() {
   // loadAuthors func wraps 'dispatch' fn, so it can run later
   return function (dispatch) {

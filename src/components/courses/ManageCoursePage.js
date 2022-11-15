@@ -27,9 +27,17 @@ export function ManageCoursePage({
   const [routerPrompt, setFormState] = useUnsavedChangesWarning();
 
   // fetch courses and authors when comp is mounted
+
   useEffect(() => {
     if (courses.length === 0) {
-      loadCourses().catch((error) => alert("Error fetching courses" + error));
+      //   try {
+      //     await loadCourses();
+      //   } catch (error) {
+      //     toast.error("Error fetching courses" + error);
+      //   }
+      loadCourses().catch((error) =>
+        toast.error("Error fetching courses" + error)
+      );
     } else {
       setCourse({ ...props.course }); //when props change (props.course), update state (course) with new data; copy the course passed in on props to state any time a new course is passed in
     }
@@ -46,6 +54,7 @@ export function ManageCoursePage({
     }));
     setFormState("modified");
   }
+
   // Implement client-side form validation for instant feedback, not to wait for server validation, good UX
   function formIsValid() {
     const { title, authorId, category } = course;

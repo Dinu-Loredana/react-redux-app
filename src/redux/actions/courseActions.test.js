@@ -60,6 +60,7 @@ describe("testing action creators", () => {
 });
 
 // ---------- Testing Thunks ----------
+// Goal: dispatch the thunk action creator from store and returns the expected action types
 // mock the api request and the store, dispatch the thunk action creator and expect the result of store.getActions() to match the expected actions for this request
 // Test an async action (configureMockStore needs a middleware (thunk is used))
 // create mock store
@@ -86,6 +87,7 @@ describe("test loadCourses Thunk", () => {
     // initialize the store to contain an empty array of courses
     const store = mockStore({ courses: [] });
     // dispatch loadCourses thunk action creator, call getActions from the mockStore which returns a list of actions that have occured (should match the expected actions declare above)
+
     return store.dispatch(courseActions.loadCourses()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
@@ -149,6 +151,28 @@ describe("test saveCourse thunk", () => {
     const store = mockStore({ courses: [] });
     return store.dispatch(courseActions.saveCourse(newCourse)).catch(() => {
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
+
+describe("test deleteCourse thunk", () => {
+  it("expected action should be dispatched on delete request", () => {
+    // mock the fetch request (delete method): courseApi.deleteCourse(course.id);
+    fetchMock.mock("*", {
+      body: courses[0].id,
+      headers: { "content-type": "application/json" },
+    });
+    const expectedAction = [
+      {
+        type: types.DELETE_COURSE_OPTIMISTIC,
+        course: courses[0],
+      },
+    ];
+
+    const store = mockStore({ courses });
+    // dispatch the delete thunk action that will delete the course passed in that will dispatch the action type DELETE_COURSE_OPTIMISTIC (triggers the reducer which updates the store)
+    return store.dispatch(courseActions.deleteCourse(courses[0])).then(() => {
+      expect(store.getActions()).toEqual(expectedAction);
     });
   });
 });

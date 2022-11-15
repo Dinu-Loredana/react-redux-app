@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import { get } from "lodash";
+// import { get } from "lodash";
 
 export function clearSortParams() {
   return {
@@ -14,8 +14,8 @@ export function clearSortParams() {
 export function setSortParams(sortKey) {
   return (dispatch, getState) => {
     const { sortParams } = getState();
-    const order = get(sortParams, "order");
-
+    const { order } = sortParams;
+    // const order = get(sortParams, "order");
     dispatch({
       type: types.SET_SORT_PARAMS,
       payload: {
