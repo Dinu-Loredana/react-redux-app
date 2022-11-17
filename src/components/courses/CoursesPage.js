@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorsActions from "../../redux/actions/authorActions";
 import * as sortActions from "../../redux/actions/sortActions";
-import * as filterActions from "../../redux/actions/filterActions";
+// import * as filterActions from "../../redux/actions/filterActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
@@ -14,21 +14,21 @@ import { getSortedCourses, sortSelector } from "../../selectors";
 import { SortInfo } from "./SortInfo";
 // import { selectSortedCourses } from "../../redux/reducers";
 
-class CoursesPage extends React.Component {
+export class CoursesPage extends React.Component {
   state = {
     redirectToAddCoursePage: false,
   };
   componentDidMount() {
-    const { coursesList, authors, actions } = this.props;
+    const { coursesList, authors, actions, loadCourses } = this.props;
     if (coursesList?.length === 0) {
-      actions
-        .loadCourses()
-        .catch((error) => alert("Error fetching courses" + error));
+      loadCourses().catch((error) =>
+        toast.error("Error fetching courses" + error)
+      );
     }
     if (authors?.length === 0) {
       actions
         .loadAuthors()
-        .catch((error) => alert("Error fetching authors" + error));
+        .catch((error) => toast.error("Error fetching authors" + error));
     }
   }
 
@@ -73,8 +73,8 @@ class CoursesPage extends React.Component {
                 sort={this.props.sortParams}
                 onSort={(key) => this.props.actions.setSortParams(key)}
                 onSortClear={() => this.props.actions.clearSortParams()}
-                onFilterAuthor={(a) => this.props.actions.setFilteredAuthor(a)}
-                filteredAuthor={this.props.filteredAuthor}
+                // onFilterAuthor={(a) => this.props.actions.setFilteredAuthor(a)}
+                // filteredAuthor={this.props.filteredAuthor}
               />
             ) : (
               <h4 className="add-course" style={{ textAlign: "center" }}>
@@ -97,8 +97,9 @@ CoursesPage.propTypes = {
   setSortParams: PropTypes.func,
   clearSortParams: PropTypes.func,
   sortParams: PropTypes.object,
-  setFilteredAuthor: PropTypes.func,
-  filteredAuthor: PropTypes.string,
+  // setFilteredAuthor: PropTypes.func,
+  // filteredAuthor: PropTypes.string,
+  loadCourses: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -107,14 +108,15 @@ function mapStateToProps(state) {
     authors: state?.authors,
     loading: state?.apiCallsInProgress > 0,
     sortParams: sortSelector(state),
-    filteredAuthor: state.filteredAuthor,
+    // filteredAuthor: state.filteredAuthor,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    loadCourses: courseActions.loadCourses,
     actions: {
-      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch), //redux thunk fn to fetch courses async
+      //redux thunk fn to fetch courses async
       loadAuthors: bindActionCreators(authorsActions.loadAuthors, dispatch), //redux thunk fn to fetch authors async
       deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch),
       setSortParams: bindActionCreators(sortActions.setSortParams, dispatch),
@@ -122,10 +124,10 @@ function mapDispatchToProps(dispatch) {
         sortActions.clearSortParams,
         dispatch
       ),
-      setFilteredAuthor: bindActionCreators(
-        filterActions.setFilterAuthor,
-        dispatch
-      ),
+      // setFilteredAuthor: bindActionCreators(
+      //   filterActions.setFilterAuthor,
+      //   dispatch
+      // ),
     },
   };
 }
