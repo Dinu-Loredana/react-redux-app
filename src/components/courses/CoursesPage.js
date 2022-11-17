@@ -19,11 +19,11 @@ export class CoursesPage extends React.Component {
     redirectToAddCoursePage: false,
   };
   componentDidMount() {
-    const { coursesList, authors, actions, loadCourses } = this.props;
+    const { coursesList, authors, actions } = this.props;
     if (coursesList?.length === 0) {
-      loadCourses().catch((error) =>
-        toast.error("Error fetching courses" + error)
-      );
+      actions
+        .loadCourses()
+        .catch((error) => toast.error("Error fetching courses" + error));
     }
     if (authors?.length === 0) {
       actions
@@ -32,14 +32,20 @@ export class CoursesPage extends React.Component {
     }
   }
 
-  handleDeleteCourse = async (course) => {
+  handleDeleteCourse = (course) => {
     toast.success("Course deleted!"); // show message before api call finishes the deleting
-    try {
-      await this.props.actions.deleteCourse(course); // behind the scenes, the req are still in progress
-    } catch (error) {
-      toast.error("Delete failed" + error.message, { autoClose: false }); // handle fail in case or optimistic delete (show another message - error - that closes when user close it)
-    }
+    this.props.actions
+      .deleteCourse(course)
+      .catch((error) =>
+        toast.error("Delete failed" + error.message, { autoClose: false })
+      );
   };
+  // try {
+  //   await this.props.actions.deleteCourse(course); // behind the scenes, the req are still in progress
+  // } catch (error) {
+  //   toast.error("Delete failed" + error.message, { autoClose: false }); // handle fail in case or optimistic delete (show another message - error - that closes when user close it)
+  // }
+
   // Syntatic sugar to promises: async/await -> uses promises behind the scenes. Can interact with promises.
 
   render() {
@@ -99,7 +105,6 @@ CoursesPage.propTypes = {
   sortParams: PropTypes.object,
   // setFilteredAuthor: PropTypes.func,
   // filteredAuthor: PropTypes.string,
-  loadCourses: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -114,9 +119,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadCourses: courseActions.loadCourses,
     actions: {
-      //redux thunk fn to fetch courses async
+      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch), //redux thunk fn to fetch courses async
       loadAuthors: bindActionCreators(authorsActions.loadAuthors, dispatch), //redux thunk fn to fetch authors async
       deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch),
       setSortParams: bindActionCreators(sortActions.setSortParams, dispatch),

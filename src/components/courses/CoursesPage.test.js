@@ -1,11 +1,11 @@
 import React from "react";
 import { CoursesPage } from "./CoursesPage";
-import { courses, authors } from "../../../tools/mockData";
-import { render, waitFor } from "@testing-library/react";
+import { courses, authors, newCourse } from "../../../tools/mockData";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import * as courseApi from "../../api/courseApi";
 import * as authorApi from "../../api/authorApi";
-import { loadCourses } from "../../redux/actions/courseActions";
+import { deleteCourse, loadCourses } from "../../redux/actions/courseActions";
 import * as types from "../../redux/actions/actionTypes";
 import "@testing-library/jest-dom";
 import { loadAuthors } from "../../redux/actions/authorActions";
@@ -18,14 +18,16 @@ function renderCoursesPage(args) {
     sortParams: { key: "title", order: "asc" },
     history: {}, // alternative to MemoryRouter
     match: {},
-    loadCourses: () => {
-      return Promise.reject(new Error("fail"));
-    },
     actions: {
+      loadCourses: () => {
+        return Promise.reject(new Error("fail"));
+      },
       loadAuthors: () => {
         return Promise.reject(new Error("error"));
       },
-      deleteCourse: () => {},
+      deleteCourse: () => {
+        return Promise.reject(new Error("failed"));
+      },
       setSortParams: () => {},
       clearSortParams: () => {},
     },
@@ -38,6 +40,57 @@ function renderCoursesPage(args) {
   );
 }
 
+// -------------- handleDeleteCourse
+describe("handleDeleteCourse", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should call deleteCourse thunk when button is clicked", async () => {
+    renderCoursesPage({ coursesList: courses });
+    const button = screen.getAllByText("Delete")[0];
+    const course = { ...newCourse, id: 7 };
+    fireEvent.click(button);
+    waitFor(async () =>
+      expect(screen.getByText("Course deleted!")).toBeInTheDocument()
+    );
+    jest
+      .spyOn(courseApi, "deleteCourse")
+      .mockImplementation(() => Promise.resolve(course));
+    const mockDispatch = jest.fn();
+    await deleteCourse(course)(mockDispatch);
+    const expectedAction = [
+      {
+        type: types.DELETE_COURSE_OPTIMISTIC,
+        course,
+      },
+    ];
+    expect(mockDispatch.mock.calls.length).toBe(1); //get all the calls
+    waitFor(async () =>
+      expect(mockDispatch).toHaveBeenCalledWith(expectedAction)
+    );
+  });
+
+  it("should show error if deleteCourse fails", async () => {
+    renderCoursesPage({ coursesList: courses });
+    const button = screen.getAllByText("Delete")[0];
+    const course = { ...newCourse, id: 7 };
+    fireEvent.click(button);
+    waitFor(async () =>
+      expect(screen.getByText("Course deleted!")).toBeInTheDocument()
+    );
+    jest
+      .spyOn(courseApi, "deleteCourse")
+      .mockImplementation(() => Promise.reject("failed"));
+    const mockDispatch = jest.fn();
+    await deleteCourse(course)(mockDispatch);
+    waitFor(async () =>
+      expect(screen.findByText(/Delete failed/).toBeInTheDocument())
+    );
+  });
+});
+
+// --------------- loadCourses
 describe("loadCourses", () => {
   afterEach(() => {
     jest.clearAllMocks();

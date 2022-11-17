@@ -62,6 +62,11 @@ export function deleteCourse(course) {
   // show UI message succesfully deleted, while on the background the delete is async and don't wait for response to show message; update UI with succesfull msg before API call (delete) finishes
   return function (dispatch) {
     dispatch(deleteCourseOptimistic(course)); //immediately dispatch deleteCourse
-    return courseApi.deleteCourse(course.id);
+    return courseApi
+      .deleteCourse(course.id)
+      .then((courseDeleted) => courseDeleted)
+      .catch((error) => {
+        return error;
+      });
   };
 }
