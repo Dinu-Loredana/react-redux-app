@@ -40,6 +40,18 @@ function renderCoursesPage(args) {
   );
 }
 
+describe("redirect to /course when click on Add new course button", () => {
+  it("should redirect to /course when click button", () => {
+    renderCoursesPage({ coursesList: courses });
+    expect(screen.queryByText("Add Course")).not.toBeInTheDocument(); //queryBy - useful for asserting an element that is not present; returns null
+    const addNewCourseBtn = screen.getByText("Add New Course"); // getBy - throw an error if no elements match, returns the matching node
+    fireEvent.click(addNewCourseBtn);
+    waitFor(async () =>
+      expect(screen.getByText("Add Course")).toBeInTheDocument()
+    );
+  });
+});
+
 // -------------- handleDeleteCourse
 describe("handleDeleteCourse", () => {
   afterEach(() => {
