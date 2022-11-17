@@ -4,10 +4,12 @@ import { authors, courses, newCourse } from "../../../tools/mockData";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
-import { loadCourses } from "../../redux/actions/courseActions";
+import { loadCourses, saveCourse } from "../../redux/actions/courseActions";
 import * as types from "../../redux/actions/actionTypes";
 import * as courseApi from "../../api/courseApi";
+import * as authorApi from "../../api/authorApi";
 import userEvent from "@testing-library/user-event";
+import { loadAuthors } from "../../redux/actions/authorActions";
 
 // factory function to call React comp with default values (keeps tests simple, avoid repeating it for each test);
 // pass in all the prop the comp requires, including the ones injected by redux.
@@ -18,8 +20,12 @@ function renderManageCoursePage(args) {
     history: {}, // alternative to MemoryRouter
     match: {},
     course: newCourse,
-    loadCourses: () => {},
-    loadAuthors: () => {},
+    loadCourses: () => {
+      return Promise.reject(new Error("fail"));
+    },
+    loadAuthors: () => {
+      return Promise.reject(new Error("error"));
+    },
     saveCourse: () => {},
   };
   const props = { ...defaultProps, ...args };
@@ -29,6 +35,74 @@ function renderManageCoursePage(args) {
     </MemoryRouter>
   ); // render the comp and its children in the memory
 }
+
+describe("handleSave", () => {
+  renderManageCoursePage({ courses });
+  // it("should return if form is not completed", async () => {
+  //   const nameInput = screen.getByLabelText("Title");
+  //   fireEvent.change(nameInput, { target: { value: "" } });
+  //   fireEvent.click(screen.getByText("Save"));
+  //   waitFor(async () =>
+  //     expect(
+  //       screen.getElementsByClassName("alert")[0].toEqual("Title required!")
+  //     )
+  //   );
+  //   const courseNotSave = screen.queryByText("Course saved!");
+  //   expect(courseNotSave).toBeNull();
+  // });
+
+  it("should save the course if form is completed correctly", async () => {
+    // negative - if input is empty, show error msg
+    let nameInput = screen.getByLabelText("Title");
+    fireEvent.change(nameInput, { target: { value: "" } });
+    fireEvent.click(screen.getByText("Save"));
+    waitFor(async () =>
+      expect(
+        screen.getElementsByClassName("alert")[0].toEqual("Title required!")
+      )
+    );
+
+    const addedCourse = {
+      id: null,
+      title: "New",
+      authorId: 1,
+      category: "Test",
+    };
+    // positive - fill in the form corectly
+    nameInput = screen.getByLabelText("Title");
+    fireEvent.change(nameInput, { target: { value: "New" } });
+    const categoryInput = screen.getByLabelText("Category");
+    fireEvent.change(categoryInput, { target: { value: "Test" } });
+    waitFor(async () =>
+      userEvent.selectOptions(
+        screen.getByRole("combobox"),
+        screen.getByRole("option", { name: "1" })
+      )
+    );
+
+    //click the Save button
+    fireEvent.click(screen.getByText("Save"));
+
+    waitFor(async () => expect(screen.getByText("Saving..."))); // Saving should appear
+    // mock saveCourse
+    jest
+      .spyOn(courseApi, "saveCourse")
+      .mockImplementation(() => Promise.resolve(addedCourse));
+    const mockDispatch = jest.fn(); //mocking the dispatch function
+    await saveCourse()(mockDispatch);
+
+    expect(mockDispatch.mock.calls.length).toBe(2); //get all the calls
+    //expect(mockHistoryPush).toHaveBeenCalledWith("/courses");
+    waitFor(async () =>
+      expect(screen.getByText("Course saved!")).toBeInTheDocument()
+    );
+    const history = { history: { push: jest.fn() } };
+
+    waitFor(async () =>
+      expect(history.history.push).toBeCalledWith("/courses")
+    );
+  });
+});
 
 describe("handleChange", () => {
   it("should set the form and save them to course state", async () => {
@@ -41,7 +115,7 @@ describe("handleChange", () => {
     waitFor(async () =>
       userEvent.selectOptions(screen.getByRole("option", { name: "1" }))
     );
-    expect(nameInput.value).toEqual("Excel");
+    // expect(nameInput.value).toEqual("Excel");
     waitFor(async () => expect(course.title).toEqual("Excel"));
     expect(categoryInput.value).toEqual("Random");
     waitFor(async () => expect(course.category).toEqual("Random"));
@@ -55,7 +129,6 @@ describe("handleChange", () => {
 describe("formIsValid", () => {
   it("should set error if form is not corectly completed", async () => {
     renderManageCoursePage({ courses });
-    const errors = {};
     const nameInput = screen.getByLabelText("Title");
     const categoryInput = screen.getByLabelText("Category");
     waitFor(async () =>
@@ -64,20 +137,26 @@ describe("formIsValid", () => {
 
     fireEvent.change(nameInput, { target: { value: "" } });
     fireEvent.change(categoryInput, { target: { value: "" } });
-    // fire click event
+    //Save form
     fireEvent.click(screen.getByText("Save"));
-    // errors.title = "Title required!";
-    // errors.category = "Category required!";
-    // errors.author = "Author required!";
-    // const isValid = Object.keys(errors).length === 0;
-    //expect(screen.find).toEqual("Title required!");
-    // expect(errors.category).toEqual("Category required!");
-    // expect(errors.author).toEqual("Author required!");
-    // expect(isValid).toBeFalsy();
+    waitFor(async () =>
+      expect(
+        screen.getElementsByClassName("alert")[0].toEqual("Title required!")
+      )
+    );
+    waitFor(async () =>
+      expect(
+        screen.getElementsByClassName("alert")[1].toEqual("Author required!")
+      )
+    );
+    waitFor(async () =>
+      expect(
+        screen.getElementsByClassName("alert")[2].toEqual("Category required!")
+      )
+    );
   });
   it("should be valid if form is completed", () => {
     renderManageCoursePage({ courses });
-    const errors = {};
     const nameInput = screen.getByLabelText("Title");
     const categoryInput = screen.getByLabelText("Category");
     fireEvent.change(nameInput, { target: { value: "Excel" } });
@@ -85,8 +164,12 @@ describe("formIsValid", () => {
     waitFor(async () =>
       userEvent.selectOptions(screen.getByRole("option", { name: "1" }))
     );
-    const isValid = Object.keys(errors).length === 0;
-    expect(isValid).toBeTruthy();
+    fireEvent.click(screen.getByText("Save"));
+    waitFor(async () =>
+      expect(
+        screen.getElementsByClassName("alert")[0].not.toEqual("Title required!")
+      )
+    );
   });
 });
 
@@ -121,46 +204,59 @@ describe("loadCourses", () => {
     renderManageCoursePage({ courses: [] });
     jest.spyOn(courseApi, "getCourses").mockImplementation(() => {
       return Promise.reject(new Error("fail"));
-
-      // return new Promise.reject("error");
     });
 
     const mockDispatch = jest.fn(); //mocking the dispatch function
-    screen.debug(await waitFor(() => loadCourses()(mockDispatch)));
-
-    await waitFor(() => loadCourses()(mockDispatch));
-
-    // expect(e).toMatch("Error fetching courses" + "error");
+    loadCourses()(mockDispatch);
+    //await waitFor(() => loadCourses()(mockDispatch));
     waitFor(async () =>
       expect(screen.findByText(/Error fetching courses/).toBeInTheDocument())
     );
-
-    // const expectedFailedAction = [
-    //   {
-    //     type: types.BEGIN_API_CALL,
-    //   },
-    //   {
-    //     type: types.API_CALL_ERROR,
-    //   },
-    // ];
-
-    // waitFor(async () =>
-    //   expect(mockDispatch).toHaveBeenCalledWith(expectedFailedAction)
-    // );
   });
 });
 
-// const beginCall = mockDispatch.mock.calls[0];
-// const loadCall = mockDispatch.mock.calls[1];
-// expect(beginCall[0]).toEqual({
-//   type: types.BEGIN_API_CALL,
-// });
-// expect(loadCall).toEqual([
-//   {
-//     type: types.LOAD_COURSES_SUCCESS,
-//     courses,
-//   },
-// ]);
+describe("loadAuthors", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should call loadAuthors thunk to fetch data if courses length is 0", async () => {
+    renderManageCoursePage({ authors: [] });
+    jest
+      .spyOn(authorApi, "getAuthors")
+      .mockImplementation(() => Promise.resolve(authors));
+    const mockDispatch = jest.fn();
+    await loadAuthors()(mockDispatch);
+    const expectedAction = [
+      {
+        type: types.BEGIN_API_CALL,
+      },
+      {
+        type: types.LOAD_AUTHOR_SUCCESS,
+        authors,
+      },
+    ];
+    expect(mockDispatch.mock.calls.length).toBe(2); //get all the calls
+    waitFor(async () =>
+      expect(mockDispatch).toHaveBeenCalledWith(expectedAction)
+    );
+  });
+
+  it("should show error if loadAuthors fails", async () => {
+    renderManageCoursePage({ authors: [] });
+    jest.spyOn(authorApi, "getAuthors").mockImplementation(() => {
+      return Promise.reject(new Error("error"));
+    });
+
+    const mockDispatch = jest.fn(); //mocking the dispatch function
+    //loadAuthors()(mockDispatch);
+    await loadAuthors()(mockDispatch);
+    waitFor(async () =>
+      expect(screen.findByText(/Error fetching authors/).toBeInTheDocument())
+    );
+  });
+});
+
 // use mount so the child compon is rendered too to test the comp interactions with its child compon (CourseForm) - title input of the form
 // with mount a full DOM is created in memory. Enzyme uses jsdom behind the scenes to create it
 

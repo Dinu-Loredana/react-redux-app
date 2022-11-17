@@ -1,7 +1,6 @@
 import * as types from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
 import { beginApiCall, apiCallError } from "../actions/apiStatusActions";
-import { toast } from "react-toastify";
 
 // action creators (triggers the reducer by dispatching an action type)
 export function loadCoursesSuccess(courses) {
@@ -39,23 +38,6 @@ export function loadCourses() {
   };
 }
 
-export function loadCourses1() {
-  //loadCourses action creator returns a function instead of the regular action object.
-  return async function (dispatch) {
-    dispatch(beginApiCall()); //first dispatch an immediate synchronous action to the store to indicate that you’ve started the API call
-    try {
-      const courses = await courseApi.getCourses(); //make the actual GET request to the server
-      dispatch(loadCoursesSuccess(courses)); // successful resp from the server, you dispatch a synchronous success action with the data received from the
-    } catch (error) {
-      // console.log(error.message);
-      // toast.error(error.message);
-      dispatch(apiCallError(error)); //failure resp,  dispatch a different synchronous action with the error message
-      //throw "error";
-      Promise.reject("error");
-    }
-  };
-}
-
 // thunk fn to save course async (put/post request)
 export function saveCourse(course) {
   return function (dispatch) {
@@ -63,13 +45,13 @@ export function saveCourse(course) {
     return courseApi
       .saveCourse(course)
       .then((savedCourse) => {
-        course.id
+        course?.id
           ? dispatch(updateCourseSuccess(savedCourse))
           : dispatch(createCourseSuccess(savedCourse));
       })
       .catch((error) => {
         dispatch(apiCallError(error));
-        throw error;
+        //throw error;
       });
   };
 }

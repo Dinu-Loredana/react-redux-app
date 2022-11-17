@@ -8,9 +8,9 @@ export async function handleResponse(response) {
   }
   throw new Error("Network response was not ok.", response.status);
 }
-
 // In a real app, would likely call an error logging service.
 export function handleError(error) {
+  // throw new Error("Network response was not ok.", error);
   // eslint-disable-next-line no-console
   // console.error("API call failed. " + error);
   throw error; //throw error after logging in, so fn can handle the error

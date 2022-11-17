@@ -48,6 +48,7 @@ exports[`sets submit label button to 'Save' when saving is false 1`] = `
     >
       <select
         className="form-control"
+        data-testid="select"
         id="authorId"
         name="authorId"
         onChange={[MockFunction]}
@@ -150,6 +151,7 @@ exports[`sets submit label button to 'Saving...' when saving is true 1`] = `
     >
       <select
         className="form-control"
+        data-testid="select"
         id="authorId"
         name="authorId"
         onChange={[MockFunction]}

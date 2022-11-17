@@ -30,11 +30,6 @@ export function ManageCoursePage({
 
   useEffect(() => {
     if (courses.length === 0) {
-      //   try {
-      //     await loadCourses();
-      //   } catch (error) {
-      //     toast.error("Error fetching courses" + error);
-      //   }
       loadCourses().catch((error) =>
         toast.error("Error fetching courses" + error)
       );
@@ -42,7 +37,9 @@ export function ManageCoursePage({
       setCourse({ ...props.course }); //when props change (props.course), update state (course) with new data; copy the course passed in on props to state any time a new course is passed in
     }
     if (authors.length === 0) {
-      loadAuthors().catch((error) => alert("Error fetching authors" + error));
+      loadAuthors().catch((error) =>
+        toast.error("Error fetching authors" + error)
+      );
     }
   }, [props.course]);
 

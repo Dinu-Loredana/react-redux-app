@@ -18,6 +18,7 @@ export const SortableTableHeader = ({
       </span>
       {sort && sort.key !== "" && sort.key === sortKey && (
         <span
+          data-testid="clear-sign"
           style={{
             cursor: "pointer",
             display: "inline-block",

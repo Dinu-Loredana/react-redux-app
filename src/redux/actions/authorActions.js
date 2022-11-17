@@ -19,7 +19,7 @@ export function loadAuthors() {
       })
       .catch((error) => {
         dispatch(apiCallError(error)); //redux is notified that the api call is completed (even if it hs failed) by dispatch the action type specific for it
-        throw error;
+        // throw error;
       });
   };
 }

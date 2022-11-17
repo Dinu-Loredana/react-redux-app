@@ -21,6 +21,7 @@ const SelectInput = ({
           value={value}
           onChange={onChange}
           className="form-control"
+          data-testid="select"
         >
           {/* <option value="">{defaultOption}</option> */}
           {options.map((option) => {
