@@ -4,6 +4,7 @@ import HomePage from "./home/HomePage";
 import AboutPage from "./about/AboutPage";
 import Header from "./common/Header";
 import PageNotFound from "./PageNotFound";
+// eslint-disable-next-line import/no-named-as-default
 import CoursesPage from "./courses/CoursesPage";
 // eslint-disable-next-line import/no-named-as-default
 import ManageCoursePage from "./courses/ManageCoursePage";

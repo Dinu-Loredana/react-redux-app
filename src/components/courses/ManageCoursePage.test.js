@@ -26,7 +26,15 @@ function renderManageCoursePage(args) {
     loadAuthors: () => {
       return Promise.reject(new Error("error"));
     },
-    saveCourse: () => {},
+    saveCourse: () => {
+      return Promise.resolve({
+        id: 2,
+        title: "React: The Big Picture",
+        slug: "react-big-picture",
+        authorId: 1,
+        category: "JavaScript",
+      });
+    },
   };
   const props = { ...defaultProps, ...args };
   return render(
@@ -37,21 +45,8 @@ function renderManageCoursePage(args) {
 }
 
 describe("handleSave", () => {
-  renderManageCoursePage({ courses });
-  // it("should return if form is not completed", async () => {
-  //   const nameInput = screen.getByLabelText("Title");
-  //   fireEvent.change(nameInput, { target: { value: "" } });
-  //   fireEvent.click(screen.getByText("Save"));
-  //   waitFor(async () =>
-  //     expect(
-  //       screen.getElementsByClassName("alert")[0].toEqual("Title required!")
-  //     )
-  //   );
-  //   const courseNotSave = screen.queryByText("Course saved!");
-  //   expect(courseNotSave).toBeNull();
-  // });
-
-  it("should save the course if form is completed correctly", async () => {
+  it("should create the course if form is completed correctly", async () => {
+    renderManageCoursePage({ courses });
     // negative - if input is empty, show error msg
     let nameInput = screen.getByLabelText("Title");
     fireEvent.change(nameInput, { target: { value: "" } });
@@ -62,13 +57,14 @@ describe("handleSave", () => {
       )
     );
 
+    // positive - fill in the form corectly
     const addedCourse = {
       id: null,
       title: "New",
       authorId: 1,
       category: "Test",
     };
-    // positive - fill in the form corectly
+
     nameInput = screen.getByLabelText("Title");
     fireEvent.change(nameInput, { target: { value: "New" } });
     const categoryInput = screen.getByLabelText("Category");
@@ -79,11 +75,9 @@ describe("handleSave", () => {
         screen.getByRole("option", { name: "1" })
       )
     );
-
     //click the Save button
     fireEvent.click(screen.getByText("Save"));
 
-    waitFor(async () => expect(screen.getByText("Saving..."))); // Saving should appear
     // mock saveCourse
     jest
       .spyOn(courseApi, "saveCourse")
@@ -91,15 +85,58 @@ describe("handleSave", () => {
     const mockDispatch = jest.fn(); //mocking the dispatch function
     await saveCourse()(mockDispatch);
 
+    waitFor(async () => expect(screen.getByText("Saving...")));
     expect(mockDispatch.mock.calls.length).toBe(2); //get all the calls
     //expect(mockHistoryPush).toHaveBeenCalledWith("/courses");
+
+    const history = { history: { push: jest.fn() } };
+    waitFor(async () =>
+      expect(history.history.push).toBeCalledWith("/courses")
+    );
     waitFor(async () =>
       expect(screen.getByText("Course saved!")).toBeInTheDocument()
     );
-    const history = { history: { push: jest.fn() } };
+  });
 
+  it("should update the course", async () => {
+    const course = {
+      id: 2,
+      title: "React: The Big Picture",
+      slug: "react-big-picture",
+      authorId: 1,
+      category: "JavaScript",
+    };
+    <MemoryRouter initialEntries={["/course/react-big-picture"]}>
+      {renderManageCoursePage({ course })}
+    </MemoryRouter>;
     waitFor(async () =>
-      expect(history.history.push).toBeCalledWith("/courses")
+      expect(screen.getByText("Edit Course")).toBeInTheDocument()
+    );
+    const editedCourse = {
+      id: 2,
+      title: "React - edited course",
+      slug: "react-big-picture",
+      authorId: 1,
+      category: "JavaScript",
+    };
+    const nameInput = screen.getByLabelText("Title");
+    waitFor(async () => expect(nameInput.value).toEqual(course.title));
+    fireEvent.change(nameInput, { target: { value: "React - edited course" } });
+
+    fireEvent.click(screen.getByText("Save"));
+
+    jest
+      .spyOn(courseApi, "saveCourse")
+      .mockImplementation(() => Promise.resolve(editedCourse));
+    const mockDispatch = jest.fn(); //mocking the dispatch function
+    await saveCourse()(mockDispatch);
+
+    waitFor(async () => expect(screen.getByText("Saving...")));
+    waitFor(async () =>
+      expect(screen.getByText("Course saved!")).toBeInTheDocument()
+    );
+    waitFor(async () =>
+      expect(screen.getByText("React - edited course")).toBeInTheDocument()
     );
   });
 });
