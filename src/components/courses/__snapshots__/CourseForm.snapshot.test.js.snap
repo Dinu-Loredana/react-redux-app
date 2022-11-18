@@ -54,6 +54,9 @@ exports[`sets submit label button to 'Save' when saving is false 1`] = `
         onChange={[MockFunction]}
         value={1}
       >
+        <option>
+          Select Author
+        </option>
         <option
           value={1}
         >
@@ -157,6 +160,9 @@ exports[`sets submit label button to 'Saving...' when saving is true 1`] = `
         onChange={[MockFunction]}
         value={1}
       >
+        <option>
+          Select Author
+        </option>
         <option
           value={1}
         >

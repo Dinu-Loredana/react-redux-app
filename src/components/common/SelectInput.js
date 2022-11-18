@@ -23,7 +23,7 @@ const SelectInput = ({
           className="form-control"
           data-testid="select"
         >
-          {/* <option value="">{defaultOption}</option> */}
+          <option>{defaultOption}</option>
           {options.map((option) => {
             return (
               <option key={option.value} value={option.value}>

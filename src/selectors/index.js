@@ -37,17 +37,17 @@ export const getSortedCourses = createSelector(
       }
     }
 
-    // if (sortParams.key !== "") {
-    //   return orderBy(
-    //     authorsAddedToCourses,
-    //     [sortParams.key],
-    //     [sortParams.order]
-    //   );
-    // }
-
     return authorsAddedToCourses;
   }
 );
+
+// if (sortParams.key !== "") {
+//   return orderBy(
+//     authorsAddedToCourses,
+//     [sortParams.key],
+//     [sortParams.order]
+//   );
+// }
 
 // export const getFilteredCoursesByAuthor = createSelector(
 //   coursesSelector,
