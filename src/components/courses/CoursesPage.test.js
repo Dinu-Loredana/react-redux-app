@@ -5,6 +5,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import * as courseApi from "../../api/courseApi";
 import * as authorApi from "../../api/authorApi";
+import {
+  clearSortParams,
+  setSortParams,
+} from "../../redux/actions/sortActions";
 import { deleteCourse, loadCourses } from "../../redux/actions/courseActions";
 import * as types from "../../redux/actions/actionTypes";
 import "@testing-library/jest-dom";
@@ -15,7 +19,7 @@ function renderCoursesPage(args) {
     authors,
     coursesList: courses,
     loading: false,
-    sortParams: { key: "title", order: "asc" },
+    sortParams: { key: "title", order: "desc" },
     history: {}, // alternative to MemoryRouter
     match: {},
     actions: {
@@ -39,6 +43,13 @@ function renderCoursesPage(args) {
     </MemoryRouter>
   );
 }
+describe("loading", () => {
+  it("should show Spinner when loading is true", () => {
+    renderCoursesPage({ loading: true });
+    const spinner = screen.getByText("Loading...");
+    expect(spinner).toBeInTheDocument();
+  });
+});
 
 describe("redirect to /course when click on Add new course button", () => {
   it("should redirect to /course when click button", () => {
@@ -48,6 +59,39 @@ describe("redirect to /course when click on Add new course button", () => {
     fireEvent.click(addNewCourseBtn);
     waitFor(async () =>
       expect(screen.getByText("Add Course")).toBeInTheDocument()
+    );
+  });
+});
+
+// sort table
+describe("sort table when click on a column", () => {
+  it("should display sorted data when click on title", () => {
+    renderCoursesPage({ coursesList: courses });
+    const titleColumn = screen.getByText("Title");
+    fireEvent.click(titleColumn);
+    const sortParams = { key: "title", order: "asc" };
+    const mockDispatch = jest.fn();
+    waitFor(async () => setSortParams(sortParams)(mockDispatch));
+
+    waitFor(async () =>
+      expect(screen.getByTestId("title-column")).toEqual(
+        "Architecting Applications for the Real World"
+      )
+    );
+    const clearSortBtn = screen.getByTestId("clear-sign");
+    fireEvent.click(clearSortBtn);
+    waitFor(async () => clearSortParams()(mockDispatch));
+    const expectedAction = [
+      {
+        type: types.SET_SORT_PARAMS,
+        payload: {
+          data: { key: "", order: "" },
+        },
+      },
+    ];
+
+    waitFor(async () =>
+      expect(mockDispatch).toHaveBeenCalledWith(expectedAction)
     );
   });
 });

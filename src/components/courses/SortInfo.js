@@ -24,6 +24,6 @@ export const SortInfo = ({ sort, onSortClear }) => {
 };
 
 SortInfo.propTypes = {
-  onSortClear: PropTypes.func.isRequired,
-  sort: PropTypes.object.isRequired,
+  onSortClear: PropTypes.func,
+  sort: PropTypes.object,
 };

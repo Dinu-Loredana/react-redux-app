@@ -82,7 +82,7 @@ const CourseList = ({ courses, onDeleteClick, onSort, onSortClear, sort }) => {
           </tr>
         </thead>
 
-        <tbody>
+        <tbody data-testid="title-column">
           {courses?.map((course) => {
             return (
               <tr key={course.id}>
